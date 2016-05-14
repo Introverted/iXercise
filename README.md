@@ -1,6 +1,8 @@
 # iXercise WebAPP
 Project for INF132
 
+Newest version of the iXercise WebAPP, this contains the server.
+
 So from the BitSync, get all of the folders [except the js folder] and put them in your own project folder. The folders in the 
 BitSync where too much to put here and we are not changing those at all, it just contains all the stuff to make the website look
 pretty and other things.
