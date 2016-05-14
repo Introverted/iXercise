@@ -1,7 +1,7 @@
 # iXercise WebAPP
 Project for INF132
 
-Newest version of the iXercise WebAPP, this contains the server.
+Newest version of the iXercise WebAPP, it runs on a server now.
 
 So from the BitSync, get all of the folders [except the js folder] and put them in your own project folder. The folders in the 
 BitSync where too much to put here and we are not changing those at all, it just contains all the stuff to make the website look
@@ -16,6 +16,7 @@ Once you have everything in one project folder do this:
 2. run cmd
 3. go to the project folder
 4. run >node server.js
-5. The website should run
+5. go on the browser and type localhost:8173
+6. The website should run
 
 For now you can put anything and it will take you to the doctor version. 
