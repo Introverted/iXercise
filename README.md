@@ -8,6 +8,7 @@ In the js folder the funtions.js file is the only js file you will be altering a
 rest of the html files and js files that are not in the folder. 
 
 Once you have everything in one project folder do this:
+
 1. make sure node.js is installed in your computer [to test try the second step to see if it works]
 2. run cmd
 3. go to the project folder
