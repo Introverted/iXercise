@@ -13,4 +13,4 @@ Download this folder to desktop and follow these steps:
 6. The website should run
 
 For now you can put anything and it will take you to the doctor version. 
-Out of habit I always put id: d and pass: 1.
+I always put id: d and pass: 1.
