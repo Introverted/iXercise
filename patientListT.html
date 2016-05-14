@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>iXercise</title>
+
+    <link rel="stylesheet" type="text/css" href="jquery/jquery.autocomplete.css" />   
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- NEW STUFF -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <script type="text/javascript" src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
+    <script src="dist/js/app.min.js"></script>
+    <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+
+    <!-- END NEW STUFF --> 
+
+    <link rel="stylesheet" type="text/css" href="jquery/jquery.autocomplete.css" />
+    <script type="text/javascript" src="js/functions.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+
+
+            socket.emit('request patient list', "Client needs the patients");
+            socket.on('sending patient list', function(data){
+
+                $.each(data.ps , function(index, p){
+                  var html = "<tr><td>"+ "<button type='button' class='modal_button' data-toggle='modal' data-target='#patientListModal'>" + p.id + "</button>" + "</td></tr>";
+
+                  $("#patient_table").append(html);
+
+
+                $(".modal_button").click(function() {
+                  $(".modal-title").html($(this).text() + " Profile");
+                  // Reuqest the user that has been clicked 
+
+                  socket.emit('request patient', {p: $(this).text()});
+                  socket.on('patient info', function(data){
+
+                      $(".patient_id").html(data.id);
+                      $(".patient_name").html(data.first_name + " " + data.last_name);
+                      $(".patient_dob").html(data.dob);
+
+                  });
+                });
+                
+
+                $(".view_patient_info").click(function(){
+                    document.location.href='patientProfileT.html';
+                });
+
+                });
+
+            });
+
+            var image = document.getElementById('user_img');
+
+            socket.emit("request_profile_info", "Client has requested user name and img");
+            socket.on('sending profile info', function(data){
+              $(".profile_user_name").html(data.id);
+              image.src = data.img;
+            });
+
+        });
+
+    </script>
+</head>
+<body class="hold-transition skin-blue">
+<div class="wrapper">
+
+  <header class="main-header">
+    <a href="mainT.html" class="logo">
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>iXercise</b></span>
+    </a>
+
+    <nav class="navbar navbar-static-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+              <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav" id="nav_listD"> 
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-cog"></i> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="change_password.html">edit Password</a></li>
+                </ul>
+              </li>
+              <li class='active'><a href='patientListT.html'> Patients </a></li>
+              <li><a id='signout' href='loginScreen.html'> signOut </a></li>
+          </ul> 
+        </div> 
+      </div>
+    </nav> 
+  </header>
+
+
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+  <div class="sidebar">
+    <!-- user panel (Optional) -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <img src="dist/img/user2-160x160.jpg" id="user_img" class="img-circle" alt="User Image">
+      </div>
+      <div class="pull-left info">
+        <p class="profile_user_name"> </p>
+
+        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div><!-- /.user-panel -->
+    
+      <!-- search form (Optional) -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+ <div class="content-wrapper">
+  <section class="content">
+
+    <div class="box box-solid box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">Add/Remove Patients</h3>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+                    <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
+                        <tr>
+                            <td> Patient id </td>
+                            <td><input name="new_patient_id" type="text" id="new_patient_id" placeholder="########" size="20"/></td>   
+                            <td><input name="add_patient_button" type="button" id="add_patient_buttonT" size="20" value="Add" /></td>
+                        </tr>
+                        <tr>
+                            <td> Patient id </td>
+                            <td><input name="remove_patient_id" type="text" id="remove_patient_id" placeholder="########" size="20"/></td>
+                            <td><input name="remove_patient_button" type="button" id="remove_patient_buttonT" size="20" value="Remove" /></td>
+                        </tr>
+                    </table>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <h3 class="box-title">Patient List</h3>
+
+      </div>
+      <div class="box-body">
+                <div id="patient_list_div"> 
+                    <table id='patient_table' class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'></table>
+                    </div>
+                </div> 
+      </div> 
+    </div>
+    </section>
+
+
+      <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+  </footer>
+
+          <!-- Modal -->
+          <div class="modal fade" id="patientListModal" role="dialog">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title"> </h4>
+                </div>
+                <div class="modal-body">
+                            <div class='panel panel-info'>
+                                <div class='panel-body'>
+                                  <div class='row'>
+                                    <div class='col-md-3 col-lg-3 ' align='center'> <img align="middle" alt='User Pic' src='http://i709.photobucket.com/albums/ww99/JocelynCruz_album/pic.jpg_zpsjjte0hn8.png' class='img-circle img-responsive'> 
+                                    </div>
+                                <div class='col-md-9 col-lg-9'> 
+                                  <table class='table table-user-information'>
+                                    <tbody>
+                                      <tr>
+                                        <td> Name </td>
+                                        <td class="patient_name"> </td>
+                                      </tr>
+                                      <tr>
+                                        <td> ID </td>
+                                        <td class="patient_id"> </td>
+                                      </tr>
+                                      <tr>
+                                        <td> Date of Birth </td>
+                                        <td class="patient_dob"> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                  <button type='button' class='view_patient_info'> view patient stats </button>
+
+                                </div>
+                              </div>
+                            </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
+          </div> <!-- Modal end -->
+
+</div> 
+</body>
+</html>

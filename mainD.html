@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>iXercise</title>
+
+    <link rel="stylesheet" type="text/css" href="jquery/jquery.autocomplete.css" />   
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <!-- NEW STUFF -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <script type="text/javascript" src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
+  <script src="dist/js/app.min.js"></script>
+  <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+
+    <!-- END NEW STUFF --> 
+
+    <link rel="stylesheet" type="text/css" href="jquery/jquery.autocomplete.css" />
+    <script type="text/javascript" src="js/functions.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+
+            var urole = JSON.parse(localStorage.getItem('role'));
+
+            if($.inArray('admin', urole) != -1){
+                var html_nav = "<li><a href='patientListD.html'> Patients </a></li><li><a href='admin_doctor.html'> Admin </a></li><li><a id='signout' href='loginScreen.html'> signOut </a></li>";
+
+                $("#nav_listD").append(html_nav);
+            } else { 
+                var html_nav = "<li><a href='patientListD.html'> Patients </a></li><li><a id='signout' href='loginScreen.html'> signOut </a></li>";
+
+                $("#nav_listD").append(html_nav);
+            }
+
+            if($.inArray('admin', urole) != -1){
+              var html_toggle = "<input id='admin-toggle' type='checkbox' checked data-toggle='toggle' data-size='small'>";
+              $("#toggle-button").append(html_toggle);
+            }
+            else {
+              var html_toggle = "<input id='admin-toggle' type='checkbox' data-toggle='toggle' data-size='small'>";
+              $("#toggle-button").append(html_toggle);
+            }
+
+
+            $("#admin-toggle").change(function() {
+              if ($("#admin-toggle").prop('checked')){
+                  var role_change = ["doctor", "admin"];
+                  localStorage.setItem("role", JSON.stringify(role_change));
+
+                  // change role in the database
+                  socket.emit('toggle', {role : role_change});
+                  document.location.href='mainD.html';
+              }
+              else {
+                  var role_change = ["doctor"];
+                  localStorage.setItem("role", JSON.stringify(role_change));
+
+                  // change role in the database
+                  socket.emit('toggle', {role : role_change});
+                  document.location.href='mainD.html';
+              }
+            });
+
+
+              $("#sendEmail").click(function(){
+                document.location.href='mainD.html';
+              });
+
+
+          var image = document.getElementById('user_img');
+
+          socket.emit("request_profile_info", "Client has requested user name and img");
+          socket.on('sending profile info', function(data){
+            $(".profile_user_name").html(data.id);
+            image.src = data.img;
+          });
+
+
+        });
+
+    </script>
+</head>
+<body class="skin-blue">
+<div class="wrapper">
+
+  <header class="main-header">
+    <a href="mainD.html" class="logo">
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>iXercise</b></span>
+    </a>
+
+    <nav class="navbar navbar-static-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+              <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav" id="nav_listD"> 
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tools <i class="fa fa-cog"></i> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="change_password.html">edit Password</a></li>
+                  <table class='table table-user-information'>
+                    <tbody>
+                      <tr>
+                        <td id="toggle-button">Turn on/off Admin privelages? </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </ul>
+              </li>
+          </ul> 
+        </div> 
+      </div>
+    </nav> 
+  </header>
+
+
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+  <div class="sidebar">
+    <!-- user panel (Optional) -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <img src="dist/img/user2-160x160.jpg" id="user_img" class="img-circle" alt="User Image">
+      </div>
+      <div class="pull-left info">
+        <p class="profile_user_name"> </p>
+
+        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div><!-- /.user-panel -->
+
+      <!-- search form (Optional) -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+
+
+<div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Main
+        <small>Overview</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>150</h3>
+
+              <p>New Orders</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+              <p>Bounce Rate</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>44</h3>
+
+              <p>User Registrations</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>65</h3>
+
+              <p>Unique Visitors</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <section class="col-lg-7 connectedSortable">
+
+
+          <!-- Heart Rate -->
+          <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs pull-right">
+              <li class="pull-left header"><i class="fa fa-heart"></i> Heart Rate Overview</li>
+            </ul>
+            <div class="tab-content no-padding">
+              <!-- Morris chart - Sales -->
+              <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
+              <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+            </div>
+          </div>
+          <!-- /.nav-tabs-custom -->
+
+
+          <!-- quick email widget -->
+          <div class="box box-info">
+            <div class="box-header">
+              <i class="fa fa-envelope"></i>
+
+              <h3 class="box-title">Compose Email</h3>
+            </div>
+            <div class="box-body">
+              <form action="#" method="post">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="emailto" placeholder="Email to:">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="subject" placeholder="Subject">
+                </div>
+                <div>
+                  <textarea class="textarea" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="box-footer clearfix">
+              <button type="button" class="pull-right btn btn-default" id="sendEmail">Send
+                <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+          </div>
+
+        </section>
+        <!-- /.Left col -->
+        <!-- right col (We are only adding the ID to make the widgets sortable)-->
+        <section class="col-lg-5 connectedSortable">
+
+
+          <!-- Calendar -->
+          <div class="box box-solid bg-green-gradient">
+            <div class="box-header">
+              <i class="fa fa-calendar"></i>
+
+              <h3 class="box-title">Calendar</h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <!--The calendar -->
+              <div id="calendar" style="width: 100%"></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-black">
+              <div class="row">
+                <div class="col-sm-6">
+                  <!-- Progress bars -->
+                  <div class="clearfix">
+                    <span class="pull-left">Task #1</span>
+                    <small class="pull-right">90%</small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
+                  </div>
+
+                  <div class="clearfix">
+                    <span class="pull-left">Task #2</span>
+                    <small class="pull-right">70%</small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
+                  </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                  <div class="clearfix">
+                    <span class="pull-left">Task #3</span>
+                    <small class="pull-right">60%</small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" style="width: 60%;"></div>
+                  </div>
+
+                  <div class="clearfix">
+                    <span class="pull-left">Task #4</span>
+                    <small class="pull-right">40%</small>
+                  </div>
+                  <div class="progress xs">
+                    <div class="progress-bar progress-bar-green" style="width: 40%;"></div>
+                  </div>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
+          <!-- /.box -->
+
+        </section>
+        <!-- right col -->
+      </div>
+      <!-- /.row (main row) -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+
+
+
+    <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
+  </footer>
+
+
+</div>
+</body>
+</html>
