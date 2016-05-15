@@ -11,11 +11,13 @@
 4. run >node server.js
 5. go on the browser and type localhost:8173
 6. The website should run
-
-For now you can put anything and it will take you to the doctor version. 
-I always put id: d and pass: 1.
-
-######IMPORTANT FILES CONTAINING THE CODE: 
 ---
+######For now you can put anything and it will take you to the doctor version. 
+
+I always put: 
+*id: d
+*pass: 1.
+---
+######Important files containing the code: 
 All of the html files, the server.js file, and the functions.js file that is in the js folder!
 
