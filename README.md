@@ -43,12 +43,12 @@ and pass: 1.
 
 1. userList.html - contains a list of everyone in the system, add/remove users
 
-**Pages used by both the Doctor & Trainer:**
+**Pages used by the Doctor, Trainer, Admin, & Patient:**
 
 1. change_password.html - to change password
 
 **JS files:**
 
 1. server.js - manages database access and sending the information to the client in the html pages
-2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more thatn one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
+2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more than one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
 
