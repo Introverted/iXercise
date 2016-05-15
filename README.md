@@ -1,10 +1,10 @@
 # iXercise WebAPP
-Project for INF132
----
+###Project for INF132
+
 Newest version of the iXercise WebAPP, it runs on a server now.
-
-Download this folder to desktop and follow these steps:
-
+---
+Download this project desktop and follow these steps:
+======
 1. make sure node.js is installed in your computer [try the other steps to see if it works without you having to install this]
 2. run cmd
 3. go to the project folder
