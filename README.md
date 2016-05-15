@@ -14,3 +14,6 @@ Download this folder to desktop and follow these steps:
 
 For now you can put anything and it will take you to the doctor version. 
 I always put id: d and pass: 1.
+
+IMPORTANT FILES CONTAINING THE CODE: 
+All of the html files, the server.js file, and the functions.js file that is in the js folder!
