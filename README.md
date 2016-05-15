@@ -37,7 +37,7 @@ and pass: 1.
 
 1. mainT.html - the home page for the trainer version of the site 
 2. patientListT.html - shows all of the patients that the trainer has, add/remove patients
-3. patientProfileT.html - shoes a single patient's statistics 
+3. patientProfileT.html - shows a single patient's statistics 
 
 **Admin page:**
 
