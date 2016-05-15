@@ -21,33 +21,33 @@ and pass: 1.
 
 ---
 ######Important files containing the code: 
-Home pages:
+**Home pages:**
 
 1. home.html - general information about the webapp
 2. loginScreen.html - to login
 
-Doctor pages:
+**Doctor pages:**
 
 1. admin_doctor.html - admin page for the doctor
 2. mainD.html - the home page for the doctor version of the site
 3. patientListD.html - shows all of the patients that the doctor has, add/remove patients
 4. patientProfileD.html - shows a single patient's statistics 
 
-Trainer pages:
+**Trainer pages:**
 
 1. mainT.html - the home page for the trainer version of the site 
 2. patientListT.html - shows all of the patients that the trainer has, add/remove patients
 3. patientProfileT.html - shoes a single patient's statistics 
 
-Admin page:
+**Admin page:**
 
 1. userList.html - contains a list of everyone in the system, add/remove users
 
-Pages used by both the Doctor & Trainer:
+**Pages used by both the Doctor & Trainer:**
 
 1. change_password.html - to change password
 
-JS files:
+**JS files:**
 
 1. server.js - manages database access and sending the information to the client in the html pages
 2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more thatn one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
