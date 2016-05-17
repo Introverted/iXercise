@@ -4,13 +4,13 @@
 var express     = require('express');
 var app 	    = express();
 var path 	    = require('path');
-var mongoose    = require('mongoose');
+//var mongoose    = require('mongoose'); moved to separate folder
 var bodyParser  = require('body-parser');
 
 var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
-
-//var url         = "mongodb://128.195.54.50/GroupBDB";                  //HUYANH
+require('./server/models/db')
+//var uri         = "mongodb://128.195.54.50/GroupBDB";                  //HUYANH
 
 // =====================================================
 // LOADING FUNCTIONALITIES
@@ -27,8 +27,17 @@ server.listen(8173);
 // =====================================================
 // DATABASE 
 // =====================================================
-// mongoose.connect(url); // connect to the database                      //HUYANH
-
+// mongoose.connect(url); // connect to the group b database                   //HUYANH
+// mongoose.connection.on('open', function() {
+//     console.log(mongoose.connection.collection)
+//     mongoose.connection.db.collection("patient", function(err, patient) {
+//         patient.find(function(err, items) {
+//             items.toArray(function(err, itemArr) {
+//                 console.log(itemArr)
+//             })
+//         })
+//     })
+// })
 
 // =====================================================
 // PAGES TO DISPLAY
@@ -123,6 +132,9 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
                   // accessing the loginDB 
 
                   put it below so that other who may need to look at it or something will know
+
+decision will be to have 3 collections: loginCollection, userCollection, patientCollection
+loginCollection should be stored in a separate db because it manages user sessions
 */
 
 // functions
