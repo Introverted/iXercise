@@ -2,6 +2,7 @@
  * Created by huyanh on 2016. 5. 16..
  */
 var mongoose = require('mongoose');
+require('./users')
 
 var dbURI = "mongodb://128.195.54.50/GroupBDB"
 mongoose.connect(dbURI);
