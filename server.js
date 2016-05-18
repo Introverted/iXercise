@@ -4,13 +4,15 @@
 var express     = require('express');
 var app 	    = express();
 var path 	    = require('path');
-//var mongoose    = require('mongoose'); moved to separate folder
+var mongoose    = require('mongoose');
+var mongodb     = require("mongodb");
 var bodyParser  = require('body-parser');
 
 var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
-require('./server/models/db')
-//var uri         = "mongodb://128.195.54.50/GroupBDB";                  //HUYANH
+
+var MongoClient = mongodb.MongoClient;
+var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
 
 // =====================================================
 // LOADING FUNCTIONALITIES
@@ -23,21 +25,6 @@ app.set('view engine', 'html');
 
 server.listen(8173);
 
-
-// =====================================================
-// DATABASE 
-// =====================================================
-// mongoose.connect(url); // connect to the group b database                   //HUYANH
-// mongoose.connection.on('open', function() {
-//     console.log(mongoose.connection.collection)
-//     mongoose.connection.db.collection("patient", function(err, patient) {
-//         patient.find(function(err, items) {
-//             items.toArray(function(err, itemArr) {
-//                 console.log(itemArr)
-//             })
-//         })
-//     })
-// })
 
 // =====================================================
 // PAGES TO DISPLAY
@@ -110,12 +97,12 @@ app.post('/patientListT.html', function(req, res) {
 
 
 
-// ================================================                                      // HUYANH
+// ================================================                                        // HUYANH
 // io CONNECTION
 // ================================================
 
 /*
-QUICK COMMENT: I know we have a lot of collections in our database, but I was thinking of having only three:
+QUICK COMMENT: I know we have a lot of collections in our database, but I was thinking of having only two:
                1. loginDB that will look like the userdatabase variable below and will be used specifically
                   for the login only and for the a couple of functions below, not sure which ones but I 
                   specify
@@ -132,17 +119,23 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
                   // accessing the loginDB 
 
                   put it below so that other who may need to look at it or something will know
-
-decision will be to have 3 collections: loginCollection, userCollection, patientCollection
-loginCollection should be stored in a separate db because it manages user sessions
 */
 
 // functions
 io.on('connection', function (client) {
 
+	// Database variable
+	MongoClient.connect(url, function(err, db){
+		if(err){
+			console.log("Unable to connect to the mongodb server. Error: ", err);
+		} else {
+			console.log("Connection established to ", url);
+		}
+
+
 	// variables to use
-	var current_user_info = { // This will be = {}, but for testing purposes it is equal to someone already // HUYANH
-						      id: "SKJ93878",
+	var current_user_info = { // Dummy variables                                                
+						      id: "d",
 						      uid: "UCI_STUDENT_ID",
 						      first_name: "Sarah",
 						      middle_name: "K.",
@@ -158,13 +151,15 @@ io.on('connection', function (client) {
 						      reports_to: [ {id: "0198475"},  {id: "1726548"} ],
 						      patients: [{id: "1234567"}, {id: "89101112"}],
 						      picture: "dist/img/user1-128x128.jpg",
-						      role: ["doctor","admin"]                             // To test the diff roles you 
-						      //role: ["trainer"]                                  // uncomment the profile you
-						      //role: ["admin"]                                    // want to test and comment the
-						      //role: ["patient"]                                  // the current 
+						      role: ["doctor","admin"]                             
+						      //role: ["trainer"]                                  
+						      //role: ["admin"]                                   
+						      //role: ["patient"]                                 
 						    };
 
-	var current_user_patient_chosen = { // this will be {}, but for testing purposes it is equal to a patient // HUYANH
+
+
+	var current_user_patient_chosen = { // dummy variables                                        
 										id: "1234567",
 										first_name: "patient_first",
 										last_name: "patient_last",
@@ -179,7 +174,7 @@ io.on('connection', function (client) {
 									  };
 
 
-	var current_user_chosen_admin = { // this will be removed completely but here for testing        // HUYANH
+	var current_user_chosen_admin = { // dummy variables                                            
 						      id: "id",
 						      uid: "UCI_STUDENT_ID",
 						      first_name: "first",
@@ -199,57 +194,49 @@ io.on('connection', function (client) {
 						      role: [ "admin"]
 						    };
 
-	// Has a dummy database for now but will be updated later                                          // HUYANH
+	// Dummy variables                                                                           // HUYANH
 	var userDatabase = [{id:"d", pass:"1", active: true}, {id:"t", pass:"2", active: true}, {id:"a", pass:"3", active: true}, {id:"p", pass:"4", active: true}];
 
+	// VARIABLES THAT WILL ACTUALLY BE USED BELOW WITH THE DATABASES
 
 	client.on('login', function(data){
 		var id = data.id;
 		var pass = data.pass;
 		console.log("=====================================================");
-		console.log("Client logging in with . . . . .");
-		console.log("user id is " + id + ", password is " + pass);
 
-		/*                                                                                      HUYANH  
-		check the database to see if the id and password exist, if they do also check if they are active
-		Active means that they have not been 'removed' or deactivated 
-		if user not in the database or active is false, then send
-		client.emit('UNF', "User not found or deactivated"); 
+		/*                                                                                      
 																							    KRISHNA
 		This is where the unhashing of the password would come into play so that you can compare the password
 		the user has sent with the one in the database, but this can wait until the database is set up
 
-                                                                                                HUYANH 
-		If in the login database then look through the user database and make the current user info 
-		variable equal at the user info
-		var current_user_info = { 
-							      id: "id",
-							      uid: "UCI_STUDENT_ID",
-							      first_name: "Sarah",
-							      middle_name: "K.",
-							      last_name: "Johnson",
-							      dob: "date_of_birth",
-							      gender: "female",
-							      office: "XXX building Room 215",
-							      email: "asdf@abc.org",
-							      contact: "949-123-1234",
-							      position: "doctor",
-							      title: "Doctor",
-							      year_entered: "2015",
-							      reports_to: [ {id: "0198475"},  {id: "1726548"} ],
-							      patients: [{id: "1234567"}, {id: "89101112"}],
-							      picture: "filename_id.jpg",
-							      role: [ ]
-							    };
-
-		and then use we send the role to the client 
 		*/
-		client.emit('role', {role : current_user_info.role});
+
+		// Accessing the database to find the user 
+		var login_col = db.collection('login');
+
+		login_col.find({$and: [{id:id},{pass: pass}]}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {				
+				if(result[0].active == true){
+					console.log("Client logging in with . . . . .");
+					console.log("user id is " + id + ", password is " + pass);
+					client.emit('role', {role : result[0].role});
+				} else {
+					client.emit('UNF', "User not found or deactivated");
+				}
+
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
 
 	});
 
 
-	// Doctor is changing whether they have admin privelages or not so sending the new roles
+		// Doctor is changing whether they have admin privelages or not so sending the new roles
 	client.on('toggle', function(data){
 		current_user_info.role = data.role;
 		console.log("recieved the roles: " + data.role);
@@ -385,8 +372,10 @@ io.on('connection', function (client) {
 		// id
 		client.emit('sending profile info',{id: current_user_info.id, img: current_user_info.picture});
 	});
+ 
+	// - - - - - - - - - - - - - - - - - - - 
 
-
+	}); // MongoDB close statement
 
 }); // end of io.connection
 
