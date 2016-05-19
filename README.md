@@ -13,11 +13,13 @@
 6. The website should run
 
 ---
-######For now you can put anything and it will take you to the doctor version. 
+######Login Information
+Can now login as a doctor, trainer, admin, and patient
 
-I always put -  
-id: d
-and pass: 1.
+1. doctor: id - d, pass - 1
+2. trainer: id - t, pass - 2
+3. admin: id - a, pass - 3
+4. patient: id - p, pass - 4
 
 ---
 ######Important files containing the code: 
