@@ -32,7 +32,7 @@
 
         $(document).ready(function(){
 
-            socket.emit('request current patient', "Client needs the current patient's info");
+            socket.emit('request current patient', {patient: JSON.parse(localStorage.getItem('patient'))});
             socket.on('patient info', function(data){
 
                 // Data contains the patients information so display it however we need to 
@@ -41,7 +41,7 @@
 
             var image = document.getElementById('user_img');
 
-            socket.emit("request_profile_info", "Client has requested user name and img");
+            socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
               $(".profile_user_name").html(data.id);
               image.src = data.img;

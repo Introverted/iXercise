@@ -49,7 +49,7 @@
             $(".modal_button").click(function() {
                 $(".modal-title").html($(this).text() + " Profile");
 
-                socket.emit('request user', {u: $(this).text()});
+                socket.emit('request user', {u: $(this).text(), c: JSON.parse(localStorage.getItem('userid'))});
                 socket.on('user info', function(data){
                   $(".user_name").html(data.first_name + " " + data.last_name);
                   $(".user_roles").html(data.role);
@@ -61,18 +61,18 @@
 
 
             $( "#add_user_button" ).click(function() { 
-                socket.emit("add new user", {id: $('#new_user_id').val(), r: $('#new_user_position').val()});
+                socket.emit("add new user", {id: $('#new_user_id').val(), r: $('#new_user_position').val(), c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
                 document.location.href='admin_doctor.html';
             });
 
             $( "#remove_user_button" ).click(function() { 
-                socket.emit('remove user', {remove_user: $('#remove_user_id').val()});
+                socket.emit('remove user', {remove_user: $('#remove_user_id').val(), c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
                 document.location.href='admin_doctor.html';
             });
 
           var image = document.getElementById('user_img');
 
-          socket.emit("request_profile_info", "Client has requested user name and img");
+          socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
           socket.on('sending profile info', function(data){
             $(".profile_user_name").html(data.id);
             image.src = data.img;

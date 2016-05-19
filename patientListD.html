@@ -48,7 +48,7 @@
 
 
 
-            socket.emit('request patient list', "Client needs the patients");
+            socket.emit('request patient list', {user: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending patient list', function(data){
 
                 $.each(data.ps , function(index, p){
@@ -60,6 +60,8 @@
                 $(".modal_button").click(function() {
                   $(".modal-title").html($(this).text() + " Profile");
                   // Reuqest the user that has been clicked 
+
+                  localStorage.setItem("patient", JSON.stringify($(this).text()));
 
                   socket.emit('request patient', {p: $(this).text()});
                   socket.on('patient info', function(data){
@@ -114,7 +116,7 @@
 
             var image = document.getElementById('user_img');
 
-            socket.emit("request_profile_info", "Client has requested user name and img");
+            socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
               $(".profile_user_name").html(data.id);
               image.src = data.img;

@@ -16,25 +16,25 @@ $(function(){
 			
 			if ($.inArray('doctor', data.role) != -1){ 
 			    localStorage.setItem("role", JSON.stringify(data.role));
-			    localStorage.setItem("userid", userid);
+			    localStorage.setItem("userid", JSON.stringify(userid)); 
 
 				document.location.href='mainD.html'; 
 			} 
 		    else if ($.inArray('trainer', data.role) != -1){ 
 		    	localStorage.setItem("role", JSON.stringify(data.role));
-		    	localStorage.setItem("userid", userid);
+		    	localStorage.setItem("userid", JSON.stringify(userid));
 
 		    	document.location.href='mainT.html'; 
 		    }
 		    else if ($.inArray('admin', data.role) != -1){ 
 		    	localStorage.setItem("role", JSON.stringify(data.role));
-		    	localStorage.setItem("userid", userid);
+		    	localStorage.setItem("userid", JSON.stringify(userid));
 
 		    	document.location.href='userList.html'; 
 		    } 
 		    else if ($.inArray('patient', data.role) != -1){ 
 		    	localStorage.setItem("role", JSON.stringify(data.role));
-		    	localStorage.setItem("userid", userid);
+		    	localStorage.setItem("userid", JSON.stringify(userid));
 
 		    	document.location.href='patientProfileP.html'; 
 		    } 			
@@ -57,14 +57,14 @@ $(function(){
     // code when user presses the add patient button
     $( "#add_patient_buttonD" ).click(function() { 
         var np = $('#new_patient_id').val();
-        socket.emit('add new patient', {new_patient: np});
+        socket.emit('add new patient', {new_patient: np, user: JSON.parse(localStorage.getItem('userid')), role: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListD.html';
 	});
 
     // code when user presses the remove button
     $( "#remove_patient_buttonD" ).click(function() { 
         var rp = $('#remove_patient_id').val();
-        socket.emit('remove patient',{remove_patient: rp});
+        socket.emit('remove patient',{remove_patient: rp, user: JSON.parse(localStorage.getItem('userid')), role: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListD.html';
 	});
 
@@ -72,14 +72,14 @@ $(function(){
     // code when user presses the add patient button
     $( "#add_patient_buttonT" ).click(function() { 
         var np = $('#new_patient_id').val();
-        socket.emit('add new patient', {new_patient: np});
+        socket.emit('add new patient', {new_patient: np, user: JSON.parse(localStorage.getItem('userid')), role: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListT.html';
 	});
 
     // code when user presses the remove button
     $( "#remove_patient_buttonT" ).click(function() { 
         var rp = $('#remove_patient_id').val();
-        socket.emit('remove patient',{remove_patient: rp});
+        socket.emit('remove patient',{remove_patient: rp, user: JSON.parse(localStorage.getItem('userid')), role: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListT.html';
 	});
 
@@ -95,7 +95,7 @@ $(function(){
 		//var treate = $('#p_treat).val();
 
 		if (prescri != ""){
-			socket.emit('prescription', {pres: prescri});
+			socket.emit('prescription', {pres: prescri, patient: JSON.parse(localStorage.getItem('patient'))});
 		}
 		//if (treate != ""){
 		//	socket.emit('treatement', {tre: treate});

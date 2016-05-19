@@ -43,7 +43,7 @@
                 $("#nav_list").append(html_nav);
             };
 
-            socket.emit('request current patient', "Client needs the current patient's info");
+            socket.emit('request current patient', {patient: JSON.parse(localStorage.getItem('patient'))});
             socket.on('patient info', function(data){
 
               $("#patient-presc-title").html("Patient " + data.id);
@@ -62,7 +62,7 @@
 
             var image = document.getElementById('user_img');
 
-            socket.emit("request_profile_info", "Client has requested user name and img");
+            socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
               $(".profile_user_name").html(data.id);
               image.src = data.img;

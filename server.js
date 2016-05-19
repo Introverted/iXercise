@@ -131,7 +131,7 @@ io.on('connection', function (client) {
 		} else {
 			console.log("Connection established to ", url);
 		}
-
+	
 
 	// variables to use
 	var current_user_info = { // Dummy variables                                                
@@ -211,6 +211,7 @@ io.on('connection', function (client) {
 
 		*/
 
+		
 		// Accessing the database to find the user 
 		var login_col = db.collection('login');
 
@@ -222,6 +223,7 @@ io.on('connection', function (client) {
 					console.log("Client logging in with . . . . .");
 					console.log("user id is " + id + ", password is " + pass);
 					client.emit('role', {role : result[0].role});
+
 				} else {
 					client.emit('UNF', "User not found or deactivated");
 				}
@@ -232,6 +234,9 @@ io.on('connection', function (client) {
 				client.emit('UNF', "User not found or deactivated");
 			}
 		});
+		
+
+		client.emit('role', {role : current_user_info.role });
 
 	});
 
@@ -239,55 +244,61 @@ io.on('connection', function (client) {
 		// Doctor is changing whether they have admin privelages or not so sending the new roles
 	client.on('toggle', function(data){
 		current_user_info.role = data.role;
-		console.log("recieved the roles: " + data.role);
+		console.log("recieved the roles: [" + data.role + "] | user: " + data.user);
 
 		// Go through the user database here and update the role of that user there      // HUYANH
+		// data.user is the id of the current user that is logged in
 	});
 
 
 	client.on('update password', function(data){
-		console.log('recieved new password: ' + data.new_pass);
+		console.log('recieved new password: ' + data.new_pass + ' | user: ' + data.user);
 
 		// Go through the login database here and change the password of the user       // HUYANH
+		// Use data.user which is the user id and find that person
 		// This is where hashing and the security would go                              // KRISHNA
+		// Use data.new_pass and hash it 
+		// After the new pass has been hashed replace old pass with the new one         // HUYANH
+
 	});
 
 
 	client.on('add new patient', function(data){
-		console.log('recieved new patient: ' + data.new_patient);
+		console.log('recieved new patient: ' + data.new_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
-		// Go to the user database here and add this new patient                        // HUYANH
-		// But first you will need to see if they are already in the loginDB but 
-		// active is false, if so change to true, and then create a makeshift password   // KRISHNA
-		// and insert in the password even though they have a password there already
-		// You will also need to add them to the doctor's patients list and update
-		// the current user info above 
-		// Since the current user variable has who is logged in, use that to update 
-		// patient list
+		// Use data.user [id] to find if they are in the login db and check if               // HUYANH
+		// active is false, if so change to true, if not in the login db then add them
+		// create a random password generator                                               // KRISHNA
+		// update the password                                                              // HUYANH
+		// You will also need to add them to the current users patient list if 
+		// they are a trainer or a doctor, use data.role to see if trainer    
+
+		// if not in the login db then add them in there                                    // HUYANH
+		// create a password here                                                           // KRISHNA
+		// update the password                                                              // HUYANH
 		// Not sure how to get the patient information, I think this will be
-		// connected to the message queue requesting the file for this patient to 
-		// be able to update the information in the database 
-		// You may have to work with Ashish on this one ????
-		// Put the patient but maybe leave all areas blank besides the id of the patient
+		// When creating a new patient, leave all of the areas blank except 
+		// for the patient id
 	});
 
 
 	client.on('remove patient', function(data){
-		console.log('recieved patient to remove: ' + data.remove_patient);
+		console.log('recieved patient to remove: ' + data.remove_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
-		// Go to the login db and change the active to false                           // HUYANH
-		// Based on the current user, if they are a doctor or trainer, then 
-		// remove the patient from thier patient's list and update current user
-		// variable above 
+		// Use data.remove_patient to find the patient in the logindb and change          // HUYANH
+		// active value to false      
+		// then based on the user's role, remove that patient from thier list and
+		// remove them from the user database
+		// use data.user and data.role                
 
 	});
 
 
-	client.on('request patient list', function(data){
-		console.log(data);
+	client.on('request patient list', function(data){                                    
+		console.log(data.user + ' has requested their patient list');
 
-		// Assuming that the current user info variable above is updated with the
-		// current user just pass the patients to the client 
+		// Use data.user (id) to find the user in the database and get their patient        // HUYANH
+		// list and send the list to the client 
 		client.emit('sending patient list', {ps: current_user_info.patients});
 	});
 
@@ -295,21 +306,18 @@ io.on('connection', function (client) {
 	client.on('request patient', function(data){
 		console.log('client requested patient ' + data.p + ' info');
 
-		// Go to the user database and find, update the variable above with this patient     // HUYANH
-		// and send the patient to the client
-		// current_user_patient_chosen variable is what is being updated
+		// use data.p (id) to find patient in the user db and send the patient              // HUYANH
+		// info to the client
+
 		client.emit('patient info', current_user_patient_chosen);
 	});
 
 
 	client.on("request current patient", function(data){
-		console.log(data);
+		console.log("Client has requested " + data.patient +"'s info");
                                                                                            // ASHISH
-		// Will just send the variable above which should contain the user chosen
-		// previosly , this will be called if the Client looks at the patients stats 
-		// This section is dealing with displaying all of the patients game stats
-		// to thier page so this is probably where you would like to work on, or not,
-		// up to you because I am not sure what goes on the page still 
+		// use data.patient (id) to find the patient in the user db
+		// to grab their info 
 
 		client.emit('patient info', current_user_patient_chosen);
 	});
@@ -325,7 +333,7 @@ io.on('connection', function (client) {
 
 	// This is to be used by either the admin or the doctor admin
 	client.on('request user', function(data){
-		console.log("client requested user " + data.u + " info");
+		console.log( data.c + " requested user " + data.u + " info");
 
 		// Go to the database and find the user that was requested and send              // HUYANH
 		// update the current_user_chosen_admin above
@@ -333,22 +341,28 @@ io.on('connection', function (client) {
 	});
 
 
+	// This is to be used by either the admin or the doctor admin
 	client.on('add new user', function(data){
-		console.log('recieved new user: ' + data.id + " with the role " + data.r);
+		console.log('recieved new user: ' + data.id + " with the role " + data.r + " | from client: " + data.c + " with role " + data.cr);
 
-		// Go to the login db and see if they are already there and change active           // HUYANH
-		// to true and give a makeshift password                                            // KRISHNA
-		// If not in the loginDB, add them and add password and active then add them
-		// to the user database as well 
-		// but not sure how to get the user information, I think this will be
-		// connected to the message queue requesting the file for this user to 
-		// be able to update the information in the database 
-		// You may have to work with Ashish on this one 
+		// Use data.id (new user id) and see if they are already in there and               // HUYANH
+		// if they are change the active to true, if not then add them to the               // KRISHNA
+		// login db and make a new password for them
+		// Then add this user to the user database
+
+		// if the client (data.c) is a doctor (check data.cr) and the new user is a 
+		// patient then add them to thier patient list, if admin, then do nothing. 
+		// I suggest checking if they are admin and if not then they are doctor, since 
+		// a doctor can have multiple roles and you would have to check to see if in those 
+		// multiple roles, doctor is in there, while admin is just admin
+		// If new user not a patient just add to login and user dbs
+		// when adding a new user, leave all of the spaces blank except for the id
 	});
 
 
+	// This is to be used by either the admin or the doctor admin
 	client.on('remove user', function(data){
-		console.log('recieved user to remove: ' + data.remove_user);
+		console.log('recieved user to remove: ' + data.remove_user + " | from client: " + data.c + " with role " + data.cr);
 
 		// Go to the login db here and change active to false                             // HUYANH
 		// If it is a patient, then based on the current user, if doctor or trainer,
@@ -359,17 +373,17 @@ io.on('connection', function (client) {
 
 
 	client.on('prescription', function(data){
-		console.log('recieved new prescription ' + data.pres);
+		console.log('recieved new prescription ' + data.pres + " for patient " + data.patient);
 
-		// update the prescription of the patient 
+		// update the prescription (data.pres) of the patient (data.patient)              // HUYANH
 	});
 
 
 	client.on("request_profile_info", function(data){
-		console.log(data);
+		console.log("Client " + data.c + " is requesting their id and img");
+ 
+		// Get clients (data.c) and give client their id and img                         // HUYANH
 
-		// If current user is updated in the variable above then just send the img and the 
-		// id
 		client.emit('sending profile info',{id: current_user_info.id, img: current_user_info.picture});
 	});
  
