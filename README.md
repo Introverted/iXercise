@@ -14,7 +14,7 @@
 
 ---
 ######Login Information
-Can now login as a doctor, trainer, admin, and patient
+Can now login as a doctor, trainer, admin, and patient using the database
 
 1. doctor: id - d, pass - 1
 2. trainer: id - t, pass - 2
