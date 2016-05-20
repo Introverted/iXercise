@@ -21,5 +21,5 @@ var userSchema = new mongoose.Schema({
     reports_to: [String],
     patients: [String],
     picture: String,
-    role: [String],
+    role: [String] // example roles: [ "admin", "representative", "trainer", "patient_manager" ]
 });

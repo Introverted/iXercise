@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 require('./users')
+require('./patients')
 
 var dbURI = "mongodb://128.195.54.50/GroupBDB"
 mongoose.connect(dbURI);
