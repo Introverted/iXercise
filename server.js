@@ -155,8 +155,8 @@ io.on('connection', function (client) {
 						      picture: "dist/img/user1-128x128.jpg",
 						      //role: ["doctor","admin"]                             
 						      //role: ["trainer"]                                  
-						      role: ["admin"]                                   
-						      //role: ["patient"]                                 
+						      //role: ["admin"]                                   
+						      role: ["patient"]                                 
 						    };
 
 
@@ -295,7 +295,13 @@ io.on('connection', function (client) {
 		console.log('new last name: ' + data.ln);
 		console.log('new dob: ' + data.bd);
 		console.log('new gender: ' + data.g);
-		console.log('new address: ' + data.a);
+
+		console.log('new address_01: ' + data.a1);
+		console.log('new address_02: ' + data.a2);
+		console.log('new city: ' + data.cy);
+		console.log('new state: ' + data.st);
+		console.log('new zip: ' + data.zp);
+
 		console.log('new email: ' + data.e);
 		console.log('new contact: ' + data.c);
 		console.log('new date entered: ' + data.d);

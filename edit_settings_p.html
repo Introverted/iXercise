@@ -48,7 +48,13 @@
               var nln = $("#new_last_name").val();
               var ndob = $("#new_dob").val();
               var ng = $("#new_gender").val();
-              var na = $("#new_address").val();
+
+              var na1 = $("#new_address_01").val();
+              var na2 = $("#new_address_02").val();
+              var ncy = $("#new_city").val();
+              var nst = $("#new_state").val();
+              var nzp = $("#new_zip").val();
+
               var ne = $("#new_email").val();
               var nc = $("#new_contact").val();
               var nde = $("#new_date_entered").val();
@@ -56,7 +62,7 @@
               var noc = $("#new_other_carer").val();
 
               // send the new password to the server to update in database 
-              socket.emit('update patient settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, a: na, e: ne, c: nc, d: nde, pc: npc, oc: noc});
+              socket.emit('update patient settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, a1: na1, a2: na2, cy: ncy, st: nst, zp: nzp, e: ne, c: nc, d: nde, pc: npc, oc: noc});
               
               document.location.href='patientProfileP.html';               
 
@@ -194,46 +200,72 @@
       </div><!-- /.box-header -->
       <div class="box-body">
           <form id="compose-message-form" class="user_settings_edit" method="post">
+            <label>UCID</label>
                       <div class="form-group">
                           <!--<label> ucid: </label>-->
-                              <input type="text" class="form-control" id="new_ucid" placeholder="ucid">
+                              <input type="text" class="form-control" id="new_ucid">
                       </div> 
+          <label>Title</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_title" placeholder="title">
+                              <input type="text" class="form-control" id="new_title">
                       </div> 
+          <label>First Name</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_first_name" placeholder="first name">
+                              <input type="text" class="form-control" id="new_first_name">
                       </div> 
+          <label>Middle Name</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_middle_name" placeholder="middle name">
+                              <input type="text" class="form-control" id="new_middle_name">
                       </div>
+          <label>Last Name</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_last_name" placeholder="last name">
+                              <input type="text" class="form-control" id="new_last_name">
                       </div> 
+          <label>Date of Birth</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_dob" placeholder="date of birth">
+                              <input type="text" class="form-control" id="new_dob">
                       </div>  
+          <label>Gender</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_gender" placeholder="gender">
+                              <input type="text" class="form-control" id="new_gender">
+                      </div>
+        <label>Address</label>
+                      <div class="form-group">
+                              <input type="text" class="form-control" id="new_address_01" placeholder="Address 01">
                       </div>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_address" placeholder="address">
+                              <input type="text" class="form-control" id="new_address_02" placeholder="Address 02">
                       </div>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_email" placeholder="email">
+                              <input type="text" class="form-control" id="new_city" placeholder="City">
+                      </div>
+                      <div class="form-group">
+                              <input type="text" class="form-control" id="new_state" placeholder="State">
+                      </div>
+                      <div class="form-group">
+                              <input type="text" class="form-control" id="new_zip" placeholder="ZIP">
+                      </div>
+        <label>Email</label>
+                      <div class="form-group">
+                              <input type="text" class="form-control" id="new_email">
                       </div> 
+        <label>Contact</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_contact" placeholder="contact">
+                              <input type="text" class="form-control" id="new_contact">
                       </div> 
+        <label>Date Entered</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_date_entered" placeholder="date entered">
+                              <input type="text" class="form-control" id="new_date_entered">
                       </div>
+        <label>Primary Carer</label>
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_primary_carer" placeholder="primary carer">
-                      </div>  
+                              <input type="text" class="form-control" id="new_primary_carer">
+                      </div>
+        <label>Other Carer</label>  
                       <div class="form-group">
-                              <input type="text" class="form-control" id="new_other_carer" placeholder="other carer">
-                      </div>  
+                              <input type="text" class="form-control" id="new_other_carer">
+                      </div>
+        <label>Upload Image</label>  
                       <div class="form-group">
                               <p> Will need to make it so they can upload a picture </p>
                       </div> 
