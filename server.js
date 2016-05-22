@@ -12,7 +12,7 @@ var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
 
 var MongoClient = mongodb.MongoClient;
-var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
+//var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
 
 // =====================================================
 // LOADING FUNCTIONALITIES
@@ -125,12 +125,14 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
 io.on('connection', function (client) {
 
 	// Database variable
+	/*
 	MongoClient.connect(url, function(err, db){
 		if(err){
 			console.log("Unable to connect to the mongodb server. Error: ", err);
 		} else {
 			console.log("Connection established to ", url);
 		}
+	*/
 	
 
 	// variables to use
@@ -151,9 +153,9 @@ io.on('connection', function (client) {
 						      reports_to: [ {id: "0198475"},  {id: "1726548"} ],
 						      patients: [{id: "1234567"}, {id: "89101112"}],
 						      picture: "dist/img/user1-128x128.jpg",
-						      role: ["doctor","admin"]                             
+						      //role: ["doctor","admin"]                             
 						      //role: ["trainer"]                                  
-						      //role: ["admin"]                                   
+						      role: ["admin"]                                   
 						      //role: ["patient"]                                 
 						    };
 
@@ -211,7 +213,7 @@ io.on('connection', function (client) {
 
 		*/
 
-		
+		/*
 		// Accessing the database to find the user 
 		var login_col = db.collection('login');
 
@@ -234,7 +236,7 @@ io.on('connection', function (client) {
 				client.emit('UNF', "User not found or deactivated");
 			}
 		});
-		
+		*/
 
 		client.emit('role', {role : current_user_info.role });
 
@@ -260,6 +262,49 @@ io.on('connection', function (client) {
 		// Use data.new_pass and hash it 
 		// After the new pass has been hashed replace old pass with the new one         // HUYANH
 
+	});
+
+
+	client.on('update settings', function(data){
+		console.log('client ' + data.c + " has sent new: ");
+		console.log('new ucid: ' + data.ucid);
+		console.log('new first name: ' + data.fn);
+		console.log('new middle name: ' + data.mn);
+		console.log('new last name: ' + data.ln);
+		console.log('new dob: ' + data.bd);
+		console.log('new gender: ' + data.g);
+		console.log('new office: ' + data.o);
+		console.log('new email: ' + data.e);
+		console.log('new contact: ' + data.c);
+		console.log('new position: ' + data.pos);
+		console.log('new date entered: ' + data.de);
+		console.log('new title: ' + data.t);
+		console.log('new reports to: ' + data.rt);
+
+		// Go through database and update the client (data.c), with all of the values that where filled
+		// becuase the user may have only updated a couple of things not all of them, check to see if they
+		// are empty, skip, if not, then replace value in the clients file
+	});
+
+
+	client.on('update patient settings', function(data){
+		console.log('client ' + data.c + " has sent new: ");
+		console.log('new ucid: ' + data.ucid);
+		console.log('new first name: ' + data.fn);
+		console.log('new middle name: ' + data.mn);
+		console.log('new last name: ' + data.ln);
+		console.log('new dob: ' + data.bd);
+		console.log('new gender: ' + data.g);
+		console.log('new address: ' + data.a);
+		console.log('new email: ' + data.e);
+		console.log('new contact: ' + data.c);
+		console.log('new date entered: ' + data.d);
+		console.log('new primary carer: ' + data.pc);
+		console.log('new other carer: ' + data.oc);
+
+		// Go through database and update the client (data.c), with all of the values that where filled
+		// becuase the user may have only updated a couple of things not all of them, check to see if they
+		// are empty, skip, if not, then replace value in the clients file
 	});
 
 
@@ -389,7 +434,7 @@ io.on('connection', function (client) {
  
 	// - - - - - - - - - - - - - - - - - - - 
 
-	}); // MongoDB close statement
+	//}); // MongoDB close statement
 
 }); // end of io.connection
 

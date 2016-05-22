@@ -13,13 +13,11 @@
 6. The website should run
 
 ---
-######Login Information
-Can now login as a doctor, trainer, admin, and patient using the database
+######For now you can put anything and it will take you to the doctor version. 
 
-1. doctor: id - d, pass - 1
-2. trainer: id - t, pass - 2
-3. admin: id - a, pass - 3
-4. patient: id - p, pass - 4
+I always put -  
+id: d
+and pass: 1.
 
 ---
 ######Important files containing the code: 
@@ -53,5 +51,4 @@ Can now login as a doctor, trainer, admin, and patient using the database
 
 1. server.js - manages database access and sending the information to the client in the html pages
 2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more than one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
-3. server > models contains the logic for connecting to the mongodb and defining collection schemas
 
