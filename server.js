@@ -12,7 +12,7 @@ var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
 
 var MongoClient = mongodb.MongoClient;
-//var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
+var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
 
 // =====================================================
 // LOADING FUNCTIONALITIES
@@ -125,14 +125,13 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
 io.on('connection', function (client) {
 
 	// Database variable
-	/*
+	
 	MongoClient.connect(url, function(err, db){
 		if(err){
 			console.log("Unable to connect to the mongodb server. Error: ", err);
 		} else {
 			console.log("Connection established to ", url);
 		}
-	*/
 	
 
 	// variables to use
@@ -213,7 +212,7 @@ io.on('connection', function (client) {
 
 		*/
 
-		/*
+		
 		// Accessing the database to find the user 
 		var login_col = db.collection('login');
 
@@ -236,9 +235,9 @@ io.on('connection', function (client) {
 				client.emit('UNF', "User not found or deactivated");
 			}
 		});
-		*/
+		
 
-		client.emit('role', {role : current_user_info.role });
+		//client.emit('role', {role : current_user_info.role });
 
 	});
 
@@ -440,7 +439,7 @@ io.on('connection', function (client) {
  
 	// - - - - - - - - - - - - - - - - - - - 
 
-	//}); // MongoDB close statement
+	}); // MongoDB close statement
 
 }); // end of io.connection
 
