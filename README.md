@@ -51,4 +51,4 @@ and pass: 1.
 
 1. server.js - manages database access and sending the information to the client in the html pages
 2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more than one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
-
+3. server > models contains the logic for connecting to the mongodb and defining collection schemas
