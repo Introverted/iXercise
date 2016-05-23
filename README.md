@@ -43,9 +43,10 @@ and pass: 1.
 
 1. userList.html - contains a list of everyone in the system, add/remove users
 
-**Pages used by the Doctor, Trainer & Admin:**
+**Patient pages:**
 
 1. edit_settings_p.html - to change password and all of the other user settings
+2. patientProfileP.html - shows the patients game progess 
 
 **Pages used by the Doctor, Trainer & Admin:**
 
