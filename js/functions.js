@@ -1,5 +1,7 @@
 // Var to connect to the server
-var socket = io.connect('http://localhost:8173');
+//var socket = io.connect('http://128.195.54.50:8173/');
+//var socket = io.connect('http://0.0.0.0:8173/');
+var socket = io.connect();
 
 // This function is for when the user logs in, it will take them to the correct page
 $(function(){

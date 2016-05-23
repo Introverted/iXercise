@@ -4,6 +4,7 @@
 var express     = require('express');
 var app 	    = express();
 var path 	    = require('path');
+var bcrypt 		= require('bcryptjs');	
 var mongoose    = require('mongoose');
 var mongodb     = require("mongodb");
 var bodyParser  = require('body-parser');
@@ -111,15 +112,8 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
                   than all the other users, but having them together I feel would be good so that we do not
                   have to check the doctors and if not there then look at trainers, and if not there, then 
                   look at admin, etc. 
-
-                  You can do this however you want, if it does not work out this way.
-                  Please place comments as you go refering to which collection you are accessing, EXAMPLE
-
-                  client.on('login') blah blah . . .
-                  // accessing the loginDB 
-
-                  put it below so that other who may need to look at it or something will know
 */
+
 
 // functions
 io.on('connection', function (client) {
@@ -133,8 +127,9 @@ io.on('connection', function (client) {
 			console.log("Connection established to ", url);
 		}
 	
+	
 
-	// variables to use
+	// Dummy Variables that will be removed COMPLETELY once dbs are implemented correctly ///////////////////
 	var current_user_info = { // Dummy variables                                                
 						      id: "d",
 						      uid: "UCI_STUDENT_ID",
@@ -152,10 +147,10 @@ io.on('connection', function (client) {
 						      reports_to: [ {id: "0198475"},  {id: "1726548"} ],
 						      patients: [{id: "1234567"}, {id: "89101112"}],
 						      picture: "dist/img/user1-128x128.jpg",
-						      //role: ["doctor","admin"]                             
+						      role: ["doctor","admin"]                             
 						      //role: ["trainer"]                                  
 						      //role: ["admin"]                                   
-						      role: ["patient"]                                 
+						      //role: ["patient"]                                 
 						    };
 
 
@@ -196,31 +191,26 @@ io.on('connection', function (client) {
 						    };
 
 	// Dummy variables                                                                           // HUYANH
-	var userDatabase = [{id:"d", pass:"1", active: true}, {id:"t", pass:"2", active: true}, {id:"a", pass:"3", active: true}, {id:"p", pass:"4", active: true}];
-
-	// VARIABLES THAT WILL ACTUALLY BE USED BELOW WITH THE DATABASES
+	var userDatabase = [{id:"d", pass:"1", active: true, role: ["doctor", "admin"]}, {id:"t", pass:"2", active: true, role: ["trainer"]}, {id:"a", pass:"3", active: true, role: ["admin"]}, {id:"p", pass:"4", active: true, role: ["patient"]}];
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	client.on('login', function(data){
 		var id = data.id;
 		var pass = data.pass;
 		console.log("=====================================================");
 
-		/*                                                                                      
-																							    KRISHNA
-		This is where the unhashing of the password would come into play so that you can compare the password
-		the user has sent with the one in the database, but this can wait until the database is set up
 
-		*/
-
-		
 		// Accessing the database to find the user 
 		var login_col = db.collection('login');
 
 		login_col.find({$and: [{id:id},{pass: pass}]}).toArray(function(err, result){
 			if(err){
 				console.log(err);
-			} else if (result.length) {				
-				if(result[0].active == true){
+			} else if (result.length) {	
+
+				// Unhash password and compare with password client wrote and see if they are
+				// currently active in the system 
+				if(bcrypt.compareSync(data.pass, result[0].pass) && result[0].active == true){			
 					console.log("Client logging in with . . . . .");
 					console.log("user id is " + id + ", password is " + pass);
 					client.emit('role', {role : result[0].role});
@@ -242,7 +232,7 @@ io.on('connection', function (client) {
 	});
 
 
-		// Doctor is changing whether they have admin privelages or not so sending the new roles
+	// Doctor is changing whether they have admin privelages or not so sending the new roles
 	client.on('toggle', function(data){
 		current_user_info.role = data.role;
 		console.log("recieved the roles: [" + data.role + "] | user: " + data.user);
@@ -257,9 +247,11 @@ io.on('connection', function (client) {
 
 		// Go through the login database here and change the password of the user       // HUYANH
 		// Use data.user which is the user id and find that person
-		// This is where hashing and the security would go                              // KRISHNA
-		// Use data.new_pass and hash it 
-		// After the new pass has been hashed replace old pass with the new one         // HUYANH
+
+		// This hashes new password client has inputted
+		var hash_pass = bcrypt.hashSync(data.new_pass, bcrypt.genSaltSync(8), null);
+
+		// Put hash_pass into the login db as the new password                        // HUYANH
 
 	});
 
@@ -318,19 +310,31 @@ io.on('connection', function (client) {
 	client.on('add new patient', function(data){
 		console.log('recieved new patient: ' + data.new_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
+		// This randomly generates password that will be put for the new patient
+		function generatePassword() {
+		    var length = 8,
+		        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+		        retVal = "";
+		    for (var i = 0, n = charset.length; i < length; ++i) {
+		        retVal += charset.charAt(Math.floor(Math.random() * n));
+		    }
+		    return retVal;
+		}
+
+		// This is the random;y created password
+		var randGen_pass = generatePassword();  //Will need to send this to the patient somehow
+		var hashed_gen_pass = bcrypt.hashSync(randGen_pass, bcrypt.genSaltSync(8), null); 
+		
+
 		// Use data.user [id] to find if they are in the login db and check if               // HUYANH
 		// active is false, if so change to true, if not in the login db then add them
-		// create a random password generator                                               // KRISHNA
-		// update the password                                                              // HUYANH
+		// add the randomly created password from the function above 
 		// You will also need to add them to the current users patient list if 
-		// they are a trainer or a doctor, use data.role to see if trainer    
+		// they are a trainer or a doctor, use data.role to see if trainer or doctor
+		// I suggest checking if trainer else doctor
+		// leave all of the areas blank except 
+		// for the patient id        
 
-		// if not in the login db then add them in there                                    // HUYANH
-		// create a password here                                                           // KRISHNA
-		// update the password                                                              // HUYANH
-		// Not sure how to get the patient information, I think this will be
-		// When creating a new patient, leave all of the areas blank except 
-		// for the patient id
 	});
 
 
@@ -397,16 +401,30 @@ io.on('connection', function (client) {
 	client.on('add new user', function(data){
 		console.log('recieved new user: ' + data.id + " with the role " + data.r + " | from client: " + data.c + " with role " + data.cr);
 
-		// Use data.id (new user id) and see if they are already in there and               // HUYANH
-		// if they are change the active to true, if not then add them to the               // KRISHNA
-		// login db and make a new password for them
+		// This randomly generates password that will be put for the new patient
+		function generatePassword() {
+		    var length = 8,
+		        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+		        retVal = "";
+		    for (var i = 0, n = charset.length; i < length; ++i) {
+		        retVal += charset.charAt(Math.floor(Math.random() * n));
+		    }
+		    return retVal;
+		}
+
+		// This is the random;y created password
+		var randGen_pass = generatePassword();  //Will need to send this to the patient somehow
+		var hashed_gen_pass = bcrypt.hashSync(randGen_pass, bcrypt.genSaltSync(8), null); 
+
+
+		// Use data.id (new user id) and see if they are already in the login db and        // HUYANH
+		// if they are change the active to true, if not then add them to the               
+		// login db and add the randomly created password from the funct above
 		// Then add this user to the user database
 
 		// if the client (data.c) is a doctor (check data.cr) and the new user is a 
-		// patient then add them to thier patient list, if admin, then do nothing. 
-		// I suggest checking if they are admin and if not then they are doctor, since 
-		// a doctor can have multiple roles and you would have to check to see if in those 
-		// multiple roles, doctor is in there, while admin is just admin
+		// patient (data.r) then add them to thier patient list, if admin, then do nothing. 
+		// I suggest checking if they are admin and if not then they are doctor
 		// If new user not a patient just add to login and user dbs
 		// when adding a new user, leave all of the spaces blank except for the id
 	});
