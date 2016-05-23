@@ -13,7 +13,7 @@
 6. The website should run
 
 ---
-######Login Default id and passwords 
+######Login Default id and passwords: 
 
 Doctor -  id: d and pass: 1.
 
