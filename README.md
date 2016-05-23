@@ -15,21 +15,13 @@
 ---
 ######Login Default id and passwords 
 
-Doctor -  
-id: d
-and pass: 1.
+Doctor -  id: d and pass: 1.
 
-Trainer - 
-id: t
-and pass: 2
+Trainer - id: t and pass: 2
 
-Amdin - 
-id: a
-and pass: 3
+Amdin - id: a and pass: 3
 
-Patient:
-id: p
-and pass: 4
+Patient:id: p and pass: 4
 
 ---
 ######Important files containing the code: 
