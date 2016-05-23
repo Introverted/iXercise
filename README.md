@@ -43,9 +43,13 @@ and pass: 1.
 
 1. userList.html - contains a list of everyone in the system, add/remove users
 
-**Pages used by the Doctor, Trainer, Admin, & Patient:**
+**Pages used by the Doctor, Trainer & Admin:**
 
-1. change_password.html - to change password
+1. edit_settings_p.html - to change password and all of the other user settings
+
+**Pages used by the Doctor, Trainer & Admin:**
+
+1. edit_settings.html - to change password and all of the other user settings
 
 **JS files:**
 
