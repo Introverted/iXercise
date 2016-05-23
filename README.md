@@ -13,11 +13,23 @@
 6. The website should run
 
 ---
-######For now you can put anything and it will take you to the doctor version. 
+######Login Default id and passwords 
 
-I always put -  
+Doctor -  
 id: d
 and pass: 1.
+
+Trainer - 
+id: t
+and pass: 2
+
+Amdin - 
+id: a
+and pass: 3
+
+Patient:
+id: p
+and pass: 4
 
 ---
 ######Important files containing the code: 
