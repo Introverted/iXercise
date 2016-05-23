@@ -21,7 +21,7 @@ Trainer - id: t and pass: 2
 
 Amdin - id: a and pass: 3
 
-Patient:id: p and pass: 4
+Patient - id: p and pass: 4
 
 ---
 ######Important files containing the code: 
