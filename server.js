@@ -1,6 +1,6 @@
-// ====================================================
+// =====================================================================================
 // SETTING UP THE VARIABLES
-// ====================================================
+// =====================================================================================
 var express     = require('express');
 var app 	    = express();
 var path 	    = require('path');
@@ -15,9 +15,10 @@ var io  		= require('socket.io')(server);
 var MongoClient = mongodb.MongoClient;
 var url         = "mongodb://128.195.54.50/iXerciseDB";                  
 
-// =====================================================
+
+// =====================================================================================
 // LOADING FUNCTIONALITIES
-// ===================================================== 
+// =====================================================================================
 
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.json()); 
@@ -27,16 +28,16 @@ app.set('view engine', 'html');
 server.listen(8173);
 
 
-// =====================================================
+// =====================================================================================
 // PAGES TO DISPLAY
-// =====================================================
+// =====================================================================================
+
 // Get Pages 
 app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + "/home.html"));
 });
 
-
-// ===========================================================
+// -------------------------------------------------------------------------------------
 
 // Post Pages
 app.post('/loginScreen.html', function(req, res) {
@@ -88,9 +89,9 @@ app.post('/patientListT.html', function(req, res) {
 });
 
 
-// =====================================================                                     // ASHISH
+// =====================================================================================      // ASHISH
 // MESSAGE QUEUE
-// =====================================================
+// =====================================================================================
 // Since the server will be running all the time I feel like the message queue can go here
 // and constantly check for updates on patient stuff and can access the database here and send stuff 
 // send data through the io socket to the client html page to dispplay information or something, since
@@ -98,9 +99,9 @@ app.post('/patientListT.html', function(req, res) {
 
 
 
-// ================================================                                        // HUYANH
-// io CONNECTION
-// ================================================
+// =====================================================================================      
+// io CONNECTION & FUNCTIONS
+// =====================================================================================
 
 /*
 QUICK COMMENT: I know we have a lot of collections in our database, but I was thinking of having only two:
@@ -129,7 +130,7 @@ io.on('connection', function (client) {
 	
 	
 
-	// Dummy Variables that will be removed COMPLETELY once dbs are implemented correctly ///////////////////
+	// Dummy Variables that will be removed COMPLETELY once dbs are implemented correctly ///////////////
 	var current_user_info = { // Dummy variables                                                
 						      id: "d",
 						      uid: "UCI_STUDENT_ID",
