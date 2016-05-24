@@ -103,20 +103,6 @@ app.post('/patientListT.html', function(req, res) {
 // io CONNECTION & FUNCTIONS
 // =====================================================================================
 
-/*
-QUICK COMMENT: I know we have a lot of collections in our database, but I was thinking of having only two:
-               1. loginDB that will look like the userdatabase variable below and will be used specifically
-                  for the login only and for the a couple of functions below, not sure which ones but I 
-                  specify
-               2. userDB that will contain all of the doctors, trainers, admin, and patients since they 
-                  are all part of the system, not sure if that will work since patients have different ip
-                  than all the other users, but having them together I feel would be good so that we do not
-                  have to check the doctors and if not there then look at trainers, and if not there, then 
-                  look at admin, etc. 
-*/
-
-
-// FUNCTIONS 
 io.on('connection', function (client) {
 
 	// -------------------------------------------------------------------------------- STATUS: FINISHED
