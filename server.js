@@ -190,11 +190,11 @@ io.on('connection', function (client) {
 						      role: [ "admin"]
 						    };
 
-	// Dummy variables                                                                           // HUYANH
+	// Dummy variables                                                                           
 	var userDatabase = [{id:"d", pass:"1", active: true, role: ["doctor", "admin"]}, {id:"t", pass:"2", active: true, role: ["trainer"]}, {id:"a", pass:"3", active: true, role: ["admin"]}, {id:"p", pass:"4", active: true, role: ["patient"]}];
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	client.on('login', function(data){
+	client.on('login', function(data){                                                    // FINISHED 
 		var id = data.id;
 		var pass = data.pass;
 		console.log("=====================================================");
@@ -203,14 +203,14 @@ io.on('connection', function (client) {
 		// Accessing the database to find the user 
 		var login_col = db.collection('login');
 
-		login_col.find({$and: [{id:id},{pass: pass}]}).toArray(function(err, result){
+		login_col.find({id:id}).toArray(function(err, result){
 			if(err){
 				console.log(err);
 			} else if (result.length) {	
 
 				// Unhash password and compare with password client wrote and see if they are
 				// currently active in the system 
-				if(bcrypt.compareSync(data.pass, result[0].pass) && result[0].active == true){			
+				if(bcrypt.compareSync(data.pass, result[0].pass) && result[0].active == true){	
 					console.log("Client logging in with . . . . .");
 					console.log("user id is " + id + ", password is " + pass);
 					client.emit('role', {role : result[0].role});
@@ -232,32 +232,48 @@ io.on('connection', function (client) {
 	});
 
 
-	// Doctor is changing whether they have admin privelages or not so sending the new roles
-	client.on('toggle', function(data){
+	// Doctor is changing whether they have admin privelages or not s
+	client.on('toggle', function(data){                                                   // FINISHED
 		current_user_info.role = data.role;
 		console.log("recieved the roles: [" + data.role + "] | user: " + data.user);
 
-		// Go through the user database here and update the role of that user there      // HUYANH
-		// data.user is the id of the current user that is logged in
+		// Changing roles in the login db
+		var login_db = db.collection('login');
+
+		login_db.update(
+		   { id: data.user },
+		   { $set:
+		      {
+		        role: data.role
+		      }
+		   }
+		)
+
 	});
 
 
-	client.on('update password', function(data){
+	client.on('update password', function(data){                                            // FINISHED
 		console.log('recieved new password: ' + data.new_pass + ' | user: ' + data.user);
-
-		// Go through the login database here and change the password of the user       // HUYANH
-		// Use data.user which is the user id and find that person
 
 		// This hashes new password client has inputted
 		var hash_pass = bcrypt.hashSync(data.new_pass, bcrypt.genSaltSync(8), null);
 
-		// Put hash_pass into the login db as the new password                        // HUYANH
+		var login_db = db.collection('login');
+
+		login_db.update(
+		   { id: data.user },
+		   { $set:
+		      {
+		        pass: hash_pass
+		      }
+		   }
+		)
 
 	});
 
 
-	client.on('update settings', function(data){
-		console.log('client ' + data.c + " has sent new: ");
+	client.on('update settings', function(data){                                             // HUYANH
+		console.log('client ' + data.c + " has sent new: ");  
 		console.log('new ucid: ' + data.ucid);
 		console.log('new first name: ' + data.fn);
 		console.log('new middle name: ' + data.mn);
@@ -272,14 +288,14 @@ io.on('connection', function (client) {
 		console.log('new title: ' + data.t);
 		console.log('new reports to: ' + data.rt);
 
-		                                                                              // HUYANH
+		                                                                             
 		// Go through database and update the client (data.c), with all of the values that where filled
 		// becuase the user may have only updated a couple of things not all of them, check to see if they
 		// are empty, skip, if not, then replace value in the clients file
 	});
 
 
-	client.on('update patient settings', function(data){
+	client.on('update patient settings', function(data){                                    // HUYANH
 		console.log('client ' + data.c + " has sent new: ");
 		console.log('new ucid: ' + data.ucid);
 		console.log('new first name: ' + data.fn);
@@ -300,14 +316,14 @@ io.on('connection', function (client) {
 		console.log('new primary carer: ' + data.pc);
 		console.log('new other carer: ' + data.oc);
 
-		                                                                              // HUYANH
+		                                                                              
 		// Go through database and update the client (data.c), with all of the values that where filled
 		// becuase the user may have only updated a couple of things not all of them, check to see if they
 		// are empty, skip, if not, then replace value in the clients file
 	});
 
 
-	client.on('add new patient', function(data){
+	client.on('add new patient', function(data){                                             // HUYANH
 		console.log('recieved new patient: ' + data.new_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
 		// This randomly generates password that will be put for the new patient
@@ -324,9 +340,10 @@ io.on('connection', function (client) {
 		// This is the random;y created password
 		var randGen_pass = generatePassword();  //Will need to send this to the patient somehow
 		var hashed_gen_pass = bcrypt.hashSync(randGen_pass, bcrypt.genSaltSync(8), null); 
+		console.log("rand gen pass: " + hashed_gen_pass);
 		
 
-		// Use data.user [id] to find if they are in the login db and check if               // HUYANH
+		// Use data.user [id] to find if they are in the login db and check if               
 		// active is false, if so change to true, if not in the login db then add them
 		// add the randomly created password from the function above 
 		// You will also need to add them to the current users patient list if 
@@ -338,10 +355,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('remove patient', function(data){
+	client.on('remove patient', function(data){                                                  // HUYANH
 		console.log('recieved patient to remove: ' + data.remove_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
-		// Use data.remove_patient to find the patient in the logindb and change          // HUYANH
+		// Use data.remove_patient to find the patient in the logindb and change          
 		// active value to false      
 		// then based on the user's role, remove that patient from thier list and
 		// remove them from the user database
@@ -349,56 +366,108 @@ io.on('connection', function (client) {
 
 	});
 
+ 
+	client.on('request patient list', function(data){                                       // FINISHED                          
+		console.log(data.user + ' has requested their patient list');                   
 
-	client.on('request patient list', function(data){                                    
-		console.log(data.user + ' has requested their patient list');
+		var user_db = db.collection('users');
 
-		// Use data.user (id) to find the user in the database and get their patient        // HUYANH
-		// list and send the list to the client 
-		client.emit('sending patient list', {ps: current_user_info.patients});
+		user_db.find({id: data.user}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+				client.emit('sending patient list', {ps: result[0].patients});
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+		//client.emit('sending patient list', {ps: current_user_info.patients});
+
 	});
 
 
-	client.on('request patient', function(data){
+	client.on('request patient', function(data){                                           // FINISHED 
 		console.log('client requested patient ' + data.p + ' info');
 
-		// use data.p (id) to find patient in the user db and send the patient              // HUYANH
-		// info to the client
+		var user_db = db.collection('users');
 
-		client.emit('patient info', current_user_patient_chosen);
+		user_db.find({id: data.p}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+				client.emit('patient info', result[0]);
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+		//client.emit('patient info', current_user_patient_chosen);
 	});
 
 
-	client.on("request current patient", function(data){
+	client.on("request current patient", function(data){                                 // FINISHED
 		console.log("Client has requested " + data.patient +"'s info");
-                                                                                           // ASHISH
-		// use data.patient (id) to find the patient in the user db
-		// to grab their info 
 
-		client.emit('patient info', current_user_patient_chosen);
+		var user_db = db.collection('users');
+
+		user_db.find({id: data.patient}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+				client.emit('patient info', result[0]);
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+		//client.emit('patient info', current_user_patient_chosen);
 	});
 
 
-	client.on("database request", function(data){
+	client.on("database request", function(data){  /////////////////////////// CODING HERE NOT DONE!!!!
 		console.log(data);
 
-		// Send the client the loginDB                                                   // HUYANH
+		// Send the client the loginDB   
+		//var loginDB = db.collection("login");                                                // HUYANH
+		//console.log("This is what the login db looks like: " + loginDB);
+		//client.emit("database sent", loginDB);
 		client.emit("database sent", userDatabase);
 	});
 
 
 	// This is to be used by either the admin or the doctor admin
-	client.on('request user', function(data){
+	client.on('request user', function(data){                                             // FINISHED
 		console.log( data.c + " requested user " + data.u + " info");
 
-		// Go to the database and find the user that was requested and send              // HUYANH
-		// update the current_user_chosen_admin above
-		client.emit("user info", current_user_chosen_admin);
+
+		var user_db = db.collection('users');
+
+		user_db.find({id: data.u}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+				client.emit("user info", result[0]);
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+		//client.emit("user info", current_user_chosen_admin);
+
 	});
 
 
 	// This is to be used by either the admin or the doctor admin
-	client.on('add new user', function(data){
+	client.on('add new user', function(data){                                                    // HUYANH
 		console.log('recieved new user: ' + data.id + " with the role " + data.r + " | from client: " + data.c + " with role " + data.cr);
 
 		// This randomly generates password that will be put for the new patient
@@ -415,9 +484,9 @@ io.on('connection', function (client) {
 		// This is the random;y created password
 		var randGen_pass = generatePassword();  //Will need to send this to the patient somehow
 		var hashed_gen_pass = bcrypt.hashSync(randGen_pass, bcrypt.genSaltSync(8), null); 
+		console.log("rand gen pass: " + hashed_gen_pass);
 
-
-		// Use data.id (new user id) and see if they are already in the login db and        // HUYANH
+		// Use data.id (new user id) and see if they are already in the login db and              
 		// if they are change the active to true, if not then add them to the               
 		// login db and add the randomly created password from the funct above
 		// Then add this user to the user database
@@ -434,7 +503,7 @@ io.on('connection', function (client) {
 	client.on('remove user', function(data){
 		console.log('recieved user to remove: ' + data.remove_user + " | from client: " + data.c + " with role " + data.cr);
 
-		// Go to the login db here and change active to false                             // HUYANH
+		// Go to the login db here and change active to false                                  // HUYANH
 		// If it is a patient, then based on the current user, if doctor or trainer,
 		// also remove them from their patient list and update current user variable
 		// if ONLY admin is current user do nothing just change active to false  
@@ -442,19 +511,42 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('prescription', function(data){
+	client.on('prescription', function(data){                                                   // FINISHED 
 		console.log('recieved new prescription ' + data.pres + " for patient " + data.patient);
 
-		// update the prescription (data.pres) of the patient (data.patient)              // HUYANH
+		// update the prescription (data.pres) of the patient (data.patient)              
+		var users_db = db.collection('users');
+
+		users_db.update(
+		   { id: data.patient },
+		   { $set:
+		      {
+		        prescription: data.pres
+		      }
+		   }
+		)		
+
 	});
 
 
-	client.on("request_profile_info", function(data){
+	client.on("request_profile_info", function(data){                                           // FINISHED 
 		console.log("Client " + data.c + " is requesting their id and img");
  
-		// Get clients (data.c) and give client their id and img                         // HUYANH
+		var user_db = db.collection('users');
 
-		client.emit('sending profile info',{id: current_user_info.id, img: current_user_info.picture});
+		user_db.find({id: data.c}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+				client.emit('sending profile info',{id: result[0].id, img: result[0].picture});
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+		//client.emit('sending profile info',{id: current_user_info.id, img: current_user_info.picture});
 	});
  
 	// - - - - - - - - - - - - - - - - - - - 
