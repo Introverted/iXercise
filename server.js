@@ -447,18 +447,32 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: WORKING ON IT
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
 
 
 	client.on("database request", function(data){  
 		console.log(data);
 
 		// Send the client the loginDB   
-		var loginList = [];
-		var loginDB = db.collection("login");                                                
-		//console.log("This is what the login db looks like: " + loginDB);
-		//client.emit("database sent", loginDB);
-		client.emit("database sent", userDatabase);
+		var loginDB = db.collection("login"); 
+	
+		loginDB.count({}, function(err, num){
+			var loginList = [];
+			var dbCount = 0;
+
+			loginDB.find().forEach(function(data){
+
+				loginList.push({id: data.id});
+				dbCount++;	
+
+				if (dbCount == num){
+					client.emit("database sent", loginList);
+				}
+
+			});
+		});
+
+		//client.emit("database sent", userDatabase);
 	});
 
 
