@@ -13,7 +13,7 @@ var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
 
 var MongoClient = mongodb.MongoClient;
-var url         = "mongodb://128.195.54.50/iXerciseDB";                  //HUYANH
+var url         = "mongodb://128.195.54.50/iXerciseDB";                  
 
 // =====================================================
 // LOADING FUNCTIONALITIES
@@ -115,11 +115,11 @@ QUICK COMMENT: I know we have a lot of collections in our database, but I was th
 */
 
 
-// functions
+// FUNCTIONS 
 io.on('connection', function (client) {
 
-	// Database variable
-	
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
 	MongoClient.connect(url, function(err, db){
 		if(err){
 			console.log("Unable to connect to the mongodb server. Error: ", err);
@@ -194,7 +194,9 @@ io.on('connection', function (client) {
 	var userDatabase = [{id:"d", pass:"1", active: true, role: ["doctor", "admin"]}, {id:"t", pass:"2", active: true, role: ["trainer"]}, {id:"a", pass:"3", active: true, role: ["admin"]}, {id:"p", pass:"4", active: true, role: ["patient"]}];
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	client.on('login', function(data){                                                    // FINISHED 
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+	client.on('login', function(data){                                                
 		var id = data.id;
 		var pass = data.pass;
 		console.log("=====================================================");
@@ -232,8 +234,11 @@ io.on('connection', function (client) {
 	});
 
 
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
 	// Doctor is changing whether they have admin privelages or not s
-	client.on('toggle', function(data){                                                   // FINISHED
+	client.on('toggle', function(data){                                                   
 		current_user_info.role = data.role;
 		console.log("recieved the roles: [" + data.role + "] | user: " + data.user);
 
@@ -252,7 +257,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('update password', function(data){                                            // FINISHED
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on('update password', function(data){                                            
 		console.log('recieved new password: ' + data.new_pass + ' | user: ' + data.user);
 
 		// This hashes new password client has inputted
@@ -272,7 +280,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('update settings', function(data){                                             // HUYANH
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
+	client.on('update settings', function(data){                                             
 		console.log('client ' + data.c + " has sent new: ");  
 		console.log('new ucid: ' + data.ucid);
 		console.log('new first name: ' + data.fn);
@@ -295,7 +306,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('update patient settings', function(data){                                    // HUYANH
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
+	client.on('update patient settings', function(data){                                   
 		console.log('client ' + data.c + " has sent new: ");
 		console.log('new ucid: ' + data.ucid);
 		console.log('new first name: ' + data.fn);
@@ -323,7 +337,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('add new patient', function(data){                                             // HUYANH
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
+	client.on('add new patient', function(data){                                            
 		console.log('recieved new patient: ' + data.new_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
 		// This randomly generates password that will be put for the new patient
@@ -355,7 +372,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('remove patient', function(data){                                                  // HUYANH
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
+	client.on('remove patient', function(data){                                               
 		console.log('recieved patient to remove: ' + data.remove_patient + ' | user: ' + data.user + ' | user role: [' + data.role + ']');
 
 		// Use data.remove_patient to find the patient in the logindb and change          
@@ -367,7 +387,10 @@ io.on('connection', function (client) {
 	});
 
  
-	client.on('request patient list', function(data){                                       // FINISHED                          
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on('request patient list', function(data){                                                                
 		console.log(data.user + ' has requested their patient list');                   
 
 		var user_db = db.collection('users');
@@ -389,7 +412,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('request patient', function(data){                                           // FINISHED 
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on('request patient', function(data){                                           
 		console.log('client requested patient ' + data.p + ' info');
 
 		var user_db = db.collection('users');
@@ -410,7 +436,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on("request current patient", function(data){                                 // FINISHED
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on("request current patient", function(data){                                    
 		console.log("Client has requested " + data.patient +"'s info");
 
 		var user_db = db.collection('users');
@@ -431,21 +460,27 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on("database request", function(data){  /////////////////////////// CODING HERE NOT DONE!!!!
+	// -------------------------------------------------------------------------------- STATUS: WORKING ON IT
+
+
+	client.on("database request", function(data){  
 		console.log(data);
 
 		// Send the client the loginDB   
-		//var loginDB = db.collection("login");                                                // HUYANH
+		var loginList = [];
+		var loginDB = db.collection("login");                                                
 		//console.log("This is what the login db looks like: " + loginDB);
 		//client.emit("database sent", loginDB);
 		client.emit("database sent", userDatabase);
 	});
 
 
-	// This is to be used by either the admin or the doctor admin
-	client.on('request user', function(data){                                             // FINISHED
-		console.log( data.c + " requested user " + data.u + " info");
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
 
+
+	// This is to be used by either the admin or the doctor admin
+	client.on('request user', function(data){                                                  
+		console.log( data.c + " requested user " + data.u + " info");
 
 		var user_db = db.collection('users');
 
@@ -466,8 +501,11 @@ io.on('connection', function (client) {
 	});
 
 
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
 	// This is to be used by either the admin or the doctor admin
-	client.on('add new user', function(data){                                                    // HUYANH
+	client.on('add new user', function(data){                                                    
 		console.log('recieved new user: ' + data.id + " with the role " + data.r + " | from client: " + data.c + " with role " + data.cr);
 
 		// This randomly generates password that will be put for the new patient
@@ -499,11 +537,14 @@ io.on('connection', function (client) {
 	});
 
 
+	// -------------------------------------------------------------------------------- STATUS: HUYANH
+
+
 	// This is to be used by either the admin or the doctor admin
-	client.on('remove user', function(data){
+	client.on('remove user', function(data){                                                   
 		console.log('recieved user to remove: ' + data.remove_user + " | from client: " + data.c + " with role " + data.cr);
 
-		// Go to the login db here and change active to false                                  // HUYANH
+		// Go to the login db here and change active to false                                 
 		// If it is a patient, then based on the current user, if doctor or trainer,
 		// also remove them from their patient list and update current user variable
 		// if ONLY admin is current user do nothing just change active to false  
@@ -511,7 +552,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on('prescription', function(data){                                                   // FINISHED 
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on('prescription', function(data){                                                  
 		console.log('recieved new prescription ' + data.pres + " for patient " + data.patient);
 
 		// update the prescription (data.pres) of the patient (data.patient)              
@@ -529,7 +573,10 @@ io.on('connection', function (client) {
 	});
 
 
-	client.on("request_profile_info", function(data){                                           // FINISHED 
+	// -------------------------------------------------------------------------------- STATUS: FINISHED
+
+
+	client.on("request_profile_info", function(data){                                           
 		console.log("Client " + data.c + " is requesting their id and img");
  
 		var user_db = db.collection('users');
@@ -549,7 +596,9 @@ io.on('connection', function (client) {
 		//client.emit('sending profile info',{id: current_user_info.id, img: current_user_info.picture});
 	});
  
-	// - - - - - - - - - - - - - - - - - - - 
+
+	// --------------------------------------------------------------------------------
+
 
 	}); // MongoDB close statement
 
