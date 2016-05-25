@@ -15,13 +15,21 @@
 ---
 ######Login Default id and passwords: 
 
-Doctor -  id: d and pass: 1.
+Doctor (Jocelyn) - 
+id: 20651754
+pass: 1
 
-Trainer - id: t and pass: 2
+Trainer (ashish) - 
+id: 57771594
+pass: 2
+ 
+Admin (huyanh) - 
+id: 45209244
+pass: 3
 
-Amdin - id: a and pass: 3
-
-Patient - id: p and pass: 4
+Patient (Tiffany) - 
+id: 24680975
+pass: 4
 
 ---
 ######Important files containing the code: 
