@@ -16,19 +16,19 @@
 ######Login Default id and passwords: 
 
 Doctor (Jocelyn) - 
-id: 20651754
+id: 20651754 and 
 pass: 1
 
-Trainer (ashish) - 
-id: 57771594
+Trainer (Ashish) - 
+id: 57771594 and 
 pass: 2
  
-Admin (huyanh) - 
-id: 45209244
+Admin (Huyanh) - 
+id: 45209244 and 
 pass: 3
 
 Patient (Tiffany) - 
-id: 24680975
+id: 24680975 and 
 pass: 4
 
 ---
