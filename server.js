@@ -158,7 +158,6 @@ io.on('connection', function (client) {
 
 	// Doctor is changing whether they have admin privelages or not s
 	client.on('toggle', function(data){                                                   
-		current_user_info.role = data.role;
 		console.log("recieved the roles: [" + data.role + "] | user: " + data.user);
 
 		// Changing roles in the login db
