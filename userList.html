@@ -35,7 +35,7 @@
           socket.on('database sent', function(database){
 
             $.each( database, function(index, p){ 
-                var html = "<tr><td>"+ "<button type='button' class='modal_button' data-toggle='modal' data-target='#userModal'>" + p.id + "</button>" + "</td></tr>";
+                var html = "<tr><td>"+ "<button type='button' class='modal_button' data-toggle='modal' data-target='#userModal'>" + p.id + "</button>" + "</td><td>" + p.r + " </td></tr>";
 
                 $("#user_table").append(html);
 
@@ -149,11 +149,11 @@
                 <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
                     <tr>
 
-                            <td> user id </td>
-                            <td><input name="new_user_id" type="text" id="new_user_id" placeholder="#######" size="20"/></td>
+                            <!--<td> user id </td>-->
+                            <td><input name="new_user_id" type="text" id="new_user_id" placeholder="user id" size="20"/></td>
                             
-                            <td> Role </td>
-                            <td><input name="new_user_position" type="text" id="new_user_position" placeholder="doctor, trainer, admin" size="20"/></td>
+                            <!--<td> Role </td>-->
+                            <td><input name="new_user_position" type="text" id="new_user_position" placeholder="position" size="20"/></td>
                     </tr>
                 </table>
       </div><!-- /.box-body -->

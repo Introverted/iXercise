@@ -105,7 +105,7 @@ app.post('/patientListT.html', function(req, res) {
 
 io.on('connection', function (client) {
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- MONGO CONNECTION
 
 	MongoClient.connect(url, function(err, db){
 		if(err){
@@ -115,7 +115,7 @@ io.on('connection', function (client) {
 		}
 	
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- LOGIN
 
 	client.on('login', function(data){                                                
 		var id = data.id;
@@ -153,7 +153,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- TOGGLE ADMIN FUNCT
 
 
 	// Doctor is changing whether they have admin privelages or not s
@@ -176,7 +176,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- UPDATE PASSWORD 
 
 
 	client.on('update password', function(data){                                            
@@ -199,7 +199,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- UPDATE USER SETTINGS
 
 
 	client.on('update settings', function(data){                                             
@@ -354,7 +354,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- UPDATE PATIENT SETTINGS
 
 
 	client.on('update patient settings', function(data){                                   
@@ -544,7 +544,7 @@ io.on('connection', function (client) {
 	});
 
  
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REQUEST PATIENT LIST
 
 
 	client.on('request patient list', function(data){                                                                
@@ -567,7 +567,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REqUEST PATIENT
 
 
 	client.on('request patient', function(data){                                           
@@ -589,7 +589,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REQUEST CURRENT PATIENT
 
 
 	client.on("request current patient", function(data){                                    
@@ -611,7 +611,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REQUEST DATABASE
 
 
 	client.on("database request", function(data){  
@@ -626,7 +626,7 @@ io.on('connection', function (client) {
 
 			user_db.find().forEach(function(data){
 
-				userList.push({id: data.id});
+				userList.push({id: data.id, r: data.role});
 				dbCount++;	
 
 				if (dbCount == num){
@@ -638,7 +638,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REQUEST USER
 
 
 	// This is to be used by either the admin or the doctor admin
@@ -662,7 +662,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- ADD NEW USER
 
 
 	// This is to be used by either the admin or the doctor admin
@@ -791,7 +791,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REMOVE USER
 
 
 	// This is to be used by either the admin or the doctor admin
@@ -840,7 +840,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- UPDATE PRESCRIPTION
 
 
 	client.on('prescription', function(data){                                                  
@@ -861,7 +861,7 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- STATUS: FINISHED
+	// -------------------------------------------------------------------------------- REQUEST PROFILE INFO
 
 
 	client.on("request_profile_info", function(data){                                           
