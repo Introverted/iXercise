@@ -72,7 +72,11 @@ app.post('/admin_doctor.html', function(req, res) {
 	// stuff here if needed
 });
 
-app.post('/change_password.html', function(req, res) {
+app.post('/edit_settings.html', function(req, res) {
+	// stuff here if needed
+});
+
+app.post('/edit_settings_p.html', function(req, res) {
 	// stuff here if needed
 });
 
@@ -380,7 +384,7 @@ io.on('connection', function (client) {
 		var user_db = db.collection("users");
 
 		if (data.ucid != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -390,7 +394,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.fn != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -400,7 +404,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.mn != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -410,7 +414,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.ln != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -420,7 +424,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.db != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -430,7 +434,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.g != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -440,7 +444,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.a1 != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -450,7 +454,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.a2 != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -460,7 +464,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.cy != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -470,7 +474,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.st != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -480,7 +484,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.zp != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -490,7 +494,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.e != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -500,7 +504,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.co != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -510,7 +514,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.d != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -520,7 +524,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.pc != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -530,7 +534,7 @@ io.on('connection', function (client) {
 			)
 		} 
 		if (data.oc != ""){
-			user_db.updatel(
+			user_db.update(
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
@@ -543,6 +547,24 @@ io.on('connection', function (client) {
 	});
 
  
+ 	// -------------------------------------------------------------------------------- UPLOAD IMAGE
+ 	client.on('sending img', function(data){
+ 		console.log("Client " + data.c + " has sent an img");
+
+ 		var user_db = db.collection("users");
+
+		user_db.update(
+		   	{ id: data.c },
+		   	{ $set:
+		   		{
+		      		picture : data.img
+		      	}
+		   	}
+		)
+
+ 	});
+
+
 	// -------------------------------------------------------------------------------- REQUEST PATIENT LIST
 
 
@@ -891,3 +913,8 @@ io.on('connection', function (client) {
 }); // end of io.connection
 
 
+/* 
+ NEED TO DO:
+ 1. Have the dwownload button kind of do something, BUT NEED THE GRAPHS AND STUFF THERE
+
+*/

@@ -30,6 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="jquery/jquery.autocomplete.css" />
     <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="css/style.js"></script>
 
     <script>
 
@@ -132,6 +133,25 @@
               $(".profile_user_name").html(data.fn + " " + data.ln);
               image.src = data.img;
             });
+
+
+            var reader = new FileReader();
+               
+            reader.onload = function (e) {
+                socket.emit("sending img", {c: JSON.parse(localStorage.getItem("userid")), img: e.target.result}); 
+                document.location.href='edit_settings.html';
+            }
+
+            function readURL(input) {
+              if (input.files && input.files[0]) {
+                  reader.readAsDataURL(input.files[0]);
+              }
+            }
+                
+            $("#upload_image").change(function(){
+              readURL(this);
+            });
+
 
         });
 
@@ -294,10 +314,6 @@
                       <div class="form-group">
                               <input type="text" class="form-control" id="new_reports_to">
                       </div> 
-            <label>Upload Picture</label>
-                      <div class="form-group">
-                              <p> Will need to make it so they can upload a picture </p>
-                      </div> 
           </form>
       </div><!-- /.box-body -->
       <div class="box-footer">
@@ -305,6 +321,21 @@
       </div><!-- box-footer -->
     </div><!-- /.box -->
 
+
+    <div class="box box-solid box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Upload Image</h3>
+        <div class="box-tools pull-right">
+        </div><!-- /.box-tools -->
+      </div><!-- /.box-header -->
+      <div class="box-body">
+                  <form id="compose-message-form" method="post">
+                      <div class="form-group">
+                          <input type="file" id="upload_image" />
+                      </div> 
+                  </form>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
 
   
   </section>

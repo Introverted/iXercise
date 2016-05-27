@@ -54,6 +54,9 @@
                   $(".user_name").html(data.first_name + " " + data.last_name);
                   $(".user_roles").html(data.role);
                   $(".user_email").html(data.email);
+
+                  var image = document.getElementById('admin_image');
+                  image.src = data.picture;
                 });
             });
 
@@ -232,7 +235,7 @@
                             <div class='panel panel-info'>
                                 <div class='panel-body'>
                                   <div class='row'>
-                                    <div class='col-md-3 col-lg-3 ' align='center'> <img align="middle" alt='User Pic' src='http://i709.photobucket.com/albums/ww99/JocelynCruz_album/pic.jpg_zpsjjte0hn8.png' class='img-circle img-responsive'> 
+                                    <div class='col-md-3 col-lg-3 ' align='center'> <img align="middle" alt='User Pic' src='http://i709.photobucket.com/albums/ww99/JocelynCruz_album/pic.jpg_zpsjjte0hn8.png' class='img-circle img-responsive' id="admin_image"> 
                                     </div>
                                 <div class='col-md-9 col-lg-9'> 
                                   <table class='table table-user-information'>

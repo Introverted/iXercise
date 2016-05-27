@@ -69,7 +69,6 @@
             });
 
 
-
             $(".save_new_password").click(function(){
               var np = $("#new_password").val();
               var cnp = $("#confirm_new_password").val();
@@ -84,6 +83,24 @@
 
               document.location.href='patientProfileP.html';               
 
+            });
+
+
+            var reader = new FileReader();
+               
+            reader.onload = function (e) {
+                socket.emit("sending img", {c: JSON.parse(localStorage.getItem("userid")), img: e.target.result}); 
+                document.location.href='edit_settings_p.html';
+            }
+
+            function readURL(input) {
+              if (input.files && input.files[0]) {
+                  reader.readAsDataURL(input.files[0]);
+              }
+            }
+                
+            $("#upload_image").change(function(){
+              readURL(this);
             });
 
 
@@ -276,6 +293,21 @@
       </div><!-- box-footer -->
     </div><!-- /.box -->
 
+
+    <div class="box box-solid box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Upload Image</h3>
+        <div class="box-tools pull-right">
+        </div><!-- /.box-tools -->
+      </div><!-- /.box-header -->
+      <div class="box-body">
+                  <form id="compose-message-form" method="post">
+                      <div class="form-group">
+                          <input type="file" id="upload_image" />
+                      </div> 
+                  </form>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
 
   
   </section>
