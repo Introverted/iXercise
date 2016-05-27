@@ -13,23 +13,11 @@
 6. The website should run
 
 ---
-######Login Default id and passwords: 
+######For now you can put anything and it will take you to the doctor version. 
 
-Doctor (Jocelyn) - 
-id: 20651754 and 
-pass: 1
-
-Trainer (Ashish) - 
-id: 57771594 and 
-pass: 2
- 
-Admin (Huyanh) - 
-id: 45209244 and 
-pass: 3
-
-Patient (Tiffany) - 
-id: 24680975 and 
-pass: 4
+I always put -  
+id: d
+and pass: 1.
 
 ---
 ######Important files containing the code: 
@@ -55,17 +43,12 @@ pass: 4
 
 1. userList.html - contains a list of everyone in the system, add/remove users
 
-**Patient pages:**
+**Pages used by the Doctor, Trainer, Admin, & Patient:**
 
-1. edit_settings_p.html - to change password and all of the other user settings
-2. patientProfileP.html - shows the patients game progess 
-
-**Pages used by the Doctor, Trainer & Admin:**
-
-1. edit_settings.html - to change password and all of the other user settings
+1. change_password.html - to change password
 
 **JS files:**
 
 1. server.js - manages database access and sending the information to the client in the html pages
 2. functions.js [in the js folder] - page contains variables that are used by all pages and some functions that is used by more than one page. Good for putting information that more than one page will be using since it is being loaded by all of the pages.
-3. server > models contains the logic for connecting to the mongodb and defining collection schemas
+

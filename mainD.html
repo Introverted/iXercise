@@ -86,7 +86,7 @@
 
           socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
           socket.on('sending profile info', function(data){
-            $(".profile_user_name").html(data.id);
+            $(".profile_user_name").html(data.fn + " " + data.ln);
             image.src = data.img;
           });
 

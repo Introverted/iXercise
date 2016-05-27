@@ -38,7 +38,7 @@
           socket.emit('database request', "Client needs the entire database");
           socket.on('database sent', function(database){
 
-            $.each( database, function(index, p){
+            $.each( database, function(index, p){ 
                 var html = "<tr><td>"+ "<button type='button' class='modal_button' data-toggle='modal' data-target='#userModal'>" + p.id + "</button>" + "</td></tr>";
 
                 $("#user_table").append(html);
@@ -74,7 +74,7 @@
 
           socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
           socket.on('sending profile info', function(data){
-            $(".profile_user_name").html(data.id);
+            $(".profile_user_name").html(data.fn + " " + data.ln);
             image.src = data.img;
           });
 

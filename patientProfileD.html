@@ -47,7 +47,7 @@
             socket.on('patient info', function(data){
 
               $("#patient-presc-title").html("Patient " + data.id);
-              $(".prescription").html("Patient " + data.prescription);
+              $(".prescription").html(data.prescription);
               //$(".treatment").html("Patient " + data.prescription);
 
               // Will contain the patients information in the data so we will do what we want with it 
@@ -59,12 +59,15 @@
                 // WILL HAVE TO PUT THE HOW TO TO DOWNLOAD ALL OF THE INFORMATION 
             });
 
+            $('.save-patient_profile-info').click(function(){
+              document.location.href='patientProfileD.html'; 
+            });
 
             var image = document.getElementById('user_img');
 
             socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
-              $(".profile_user_name").html(data.id);
+              $(".profile_user_name").html(data.fn + " " + data.ln);
               image.src = data.img;
             });
 
@@ -211,7 +214,7 @@
                                     </div> 
                                     -->
                                     
-                            <button type="submit" class="save-patient_profile-info" data-dismiss="modal" style="float:right">Save</button>
+                            <button type="button" class="save-patient_profile-info" style="float:right">Save</button>
 
                                 </form>
                                 </div>

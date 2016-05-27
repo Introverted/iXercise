@@ -62,7 +62,7 @@
               var noc = $("#new_other_carer").val();
 
               // send the new password to the server to update in database 
-              socket.emit('update patient settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, a1: na1, a2: na2, cy: ncy, st: nst, zp: nzp, e: ne, c: nc, d: nde, pc: npc, oc: noc});
+              socket.emit('update patient settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, a1: na1, a2: na2, cy: ncy, st: nst, zp: nzp, e: ne, co: nc, d: nde, pc: npc, oc: noc});
               
               document.location.href='patientProfileP.html';               
 
@@ -91,7 +91,7 @@
 
             socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
-              $(".profile_user_name").html(data.id);
+              $(".profile_user_name").html(data.fn + " " + data.ln);
               image.src = data.img;
             });
 

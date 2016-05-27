@@ -111,7 +111,7 @@
               var nrt = $("#new_reports_to").val();
 
               // send the new password to the server to update in database 
-              socket.emit('update settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, o: no, e: ne, c: nc, pos: npos, de: nde, t: nt, rt: nrt});
+              socket.emit('update settings', {c: JSON.parse(localStorage.getItem('userid')), ucid: uid, fn: nfn, mn: nmn, ln: nln, bd: ndob, g: ng, o: no, e: ne, cn: nc, pos: npos, de: nde, t: nt, rt: nrt});
               
               // Here we will send the information to the sender 
               if ($.inArray('doctor', urole) != -1){
@@ -129,7 +129,7 @@
 
             socket.emit("request_profile_info", {c: JSON.parse(localStorage.getItem('userid'))});
             socket.on('sending profile info', function(data){
-              $(".profile_user_name").html(data.id);
+              $(".profile_user_name").html(data.fn + " " + data.ln);
               image.src = data.img;
             });
 
