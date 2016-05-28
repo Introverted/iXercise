@@ -44,6 +44,7 @@ $(function(){
 
 		socket.on('UNF', function(data){ // USER NOT FOUND
 		  	alert("incorrect id or password");
+		  	document.location.href='loginScreen.html'; 
 		});
 
 	});
@@ -59,7 +60,8 @@ $(function(){
     // code when user presses the add patient button
     $( "#add_patient_buttonD" ).click(function() { 
         var np = $('#new_patient_id').val();
-        socket.emit('add new user', {id: np, r: "patient", c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
+        var ne = $('#add_patient_email').val();
+        socket.emit('add new user', {id: np, r: "patient", e: ne, c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListD.html';
 	});
 
@@ -74,7 +76,8 @@ $(function(){
     // code when user presses the add patient button
     $( "#add_patient_buttonT" ).click(function() { 
         var np = $('#new_patient_id').val();
-        socket.emit('add new user', {id: np, r: "patient", c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
+        var ne = $('#add_patient_email').val();
+        socket.emit('add new user', {id: np, r: "patient", e: ne, c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
         document.location.href='patientListT.html';
 	});
 
@@ -94,14 +97,10 @@ $(function(){
 	$('.save-patient_profile-info').click(function() {
 
 		var prescri = $('#p_presc').val();
-		//var treate = $('#p_treat).val();
+		var hThresh = $('#h_th').val();
+		var lThresh = $('#l_th').val();
 
-		if (prescri != ""){
-			socket.emit('prescription', {pres: prescri, patient: JSON.parse(localStorage.getItem('patient'))});
-		}
-		//if (treate != ""){
-		//	socket.emit('treatement', {tre: treate});
-		//}
+		socket.emit('prescription', {pres: prescri, h: hThresh, l: lThresh, patient: JSON.parse(localStorage.getItem('patient'))});
 
 	});
 

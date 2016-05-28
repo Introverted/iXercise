@@ -64,7 +64,7 @@
 
 
             $( "#add_user_button" ).click(function() { 
-                socket.emit("add new user", {id: $('#new_user_id').val(), r: $('#new_user_position').val(), c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
+                socket.emit("add new user", {id: $('#new_user_id').val(), r: $('#new_user_position').val(), e: $('#new_user_email').val(), c: JSON.parse(localStorage.getItem('userid')), cr: JSON.parse(localStorage.getItem('role'))});
                 document.location.href='admin_doctor.html';
             });
 
@@ -169,6 +169,9 @@
                             
                             <!--<td> Role </td>-->
                             <td><input name="new_user_position" type="text" id="new_user_position" placeholder="position eg. doctor" size="20"/></td>
+                    </tr>
+                    <tr>
+                            <td><input name="new_user_email" type="text" id="new_user_email" placeholder="user email" size="20"/></td> 
                     </tr>
                 </table>
       </div><!-- /.box-body -->

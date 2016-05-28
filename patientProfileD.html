@@ -48,9 +48,9 @@
 
               $("#patient-presc-title").html("Patient " + data.id);
               $(".prescription").html(data.prescription);
-              //$(".treatment").html("Patient " + data.prescription);
-
-              // Will contain the patients information in the data so we will do what we want with it 
+              $(".h_thresh").html(data.threshold.high);
+              $(".l_thresh").html(data.threshold.low);
+              $("#patient-histogram").html("Weekly Patient Data");
 
             });
 
@@ -160,12 +160,17 @@
                             <td>Prescription</td>
                             <td class="prescription"> </td>
                         </tr>
-                        <!--
+                        
                         <tr>
-                            <td>Treatement</td>
-                            <td class="treatment"> </td>
+                            <td>High Threshold</td>
+                            <td class="h_thresh"> </td>
                         </tr>
-                      -->
+ 
+                         <tr>
+                            <td>Low Threshold</td>
+                            <td class="l_thresh"> </td>
+                        </tr>
+
                     </tbody>
                 </table>
       </div><!-- /.box-body -->
@@ -173,6 +178,20 @@
         <button type='button' style="float: right" name="edit_patient_treatement" id="edit_patient_treatement" class='modal_button' data-toggle='modal' data-target='#patientListModal'>edit</button>
       </div><!-- box-footer -->
     </div><!-- /.box -->
+
+
+
+    <div class="box box-solid box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title" id="patient-histogram"> </h3>
+        <div class="box-tools pull-right">
+        </div><!-- /.box-tools -->
+      </div><!-- /.box-header -->
+      <div class="box-body">
+              <!-- HERE IS WHERE YOU WOULD PUT THE CHART CODE SO THAT IT CAN COME PUT IN THE BOX-->
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+
 
   </section>
   </div> <!-- container end -->
@@ -207,12 +226,16 @@
                                             <input type="text" id="p_presc" class="form-control">
                                     </div> 
 
-                                    <!--
+                                    
                                     <div class="form-group">
-                                        <label>Treatement</label>
-                                            <input type="text" id="p_treat" class="form-control">
+                                        <label>High Threshold</label>
+                                            <input type="text" id="h_th" class="form-control">
                                     </div> 
-                                    -->
+                                    
+                                    <div class="form-group">
+                                        <label>Low Threshold</label>
+                                            <input type="text" id="l_th" class="form-control">
+                                    </div> 
                                     
                             <button type="button" class="save-patient_profile-info" style="float:right">Save</button>
 

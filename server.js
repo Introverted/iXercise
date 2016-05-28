@@ -1,6 +1,8 @@
 // =====================================================================================
 // SETTING UP THE VARIABLES
 // =====================================================================================
+
+// General variables
 var express     = require('express');
 var app 	    = express();
 var path 	    = require('path');
@@ -9,11 +11,27 @@ var mongoose    = require('mongoose');
 var mongodb     = require("mongodb");
 var bodyParser  = require('body-parser');
 
+// Socket variables
 var server      = require('http').createServer(app);
 var io  		= require('socket.io')(server);
 
+// Database variables
 var MongoClient = mongodb.MongoClient;
 var url         = "mongodb://128.195.54.50/iXerciseDB";                  
+
+// Send email variables
+var nodemailer    = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var options       = {
+		service : "gmail",
+		auth: {
+			user: "ixercisesystem@gmail.com",
+			pass: "webapplication"
+		}
+	};
+
+var transporter   = nodemailer.createTransport(smtpTransport(options));
+
 
 
 // =====================================================================================
@@ -26,6 +44,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'html');
 
 server.listen(8173);
+
+
 
 
 // =====================================================================================
@@ -91,15 +111,6 @@ app.post('/patientListD.html', function(req, res) {
 app.post('/patientListT.html', function(req, res) {
 	// stuff here if needed
 });
-
-
-// =====================================================================================      // ASHISH
-// MESSAGE QUEUE
-// =====================================================================================
-// Since the server will be running all the time I feel like the message queue can go here
-// and constantly check for updates on patient stuff and can access the database here and send stuff 
-// send data through the io socket to the client html page to dispplay information or something, since
-// I am not sure how you actually did the charts
 
 
 
@@ -448,7 +459,7 @@ io.on('connection', function (client) {
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
-		      			address_01 : data.a1
+		      			"address.address_01" : data.a1
 		      		}
 		   		}
 			)
@@ -458,7 +469,7 @@ io.on('connection', function (client) {
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
-		      			address_02 : data.a2
+		      			"address.address_02" : data.a2
 		      		}
 		   		}
 			)
@@ -468,7 +479,7 @@ io.on('connection', function (client) {
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
-		      			city : data.cy
+		      			"address.city" : data.cy
 		      		}
 		   		}
 			)
@@ -478,7 +489,7 @@ io.on('connection', function (client) {
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
-		      			state : data.st
+		      			"address.state" : data.st
 		      		}
 		   		}
 			)
@@ -488,7 +499,7 @@ io.on('connection', function (client) {
 		   		{ id: data.c },
 		   		{ $set:
 		   			{
-		      			zip : data.zp
+		      			"address.zip" : data.zp
 		      		}
 		   		}
 			)
@@ -705,7 +716,6 @@ io.on('connection', function (client) {
 		var randGen_pass = generatePassword();  //Will need to send this to the patient somehow
 		console.log("new password: " + randGen_pass);
 		var hashed_gen_pass = bcrypt.hashSync(randGen_pass, bcrypt.genSaltSync(8), null); 
-		console.log("rand gen pass: " + hashed_gen_pass);
 
 
 		var user_login = {
@@ -725,7 +735,7 @@ io.on('connection', function (client) {
 			dob: " ",
 			gender: " ",
 			office: " ",
-			email: " ",
+			email: data.e,
 			contact: " ",
 			position: " ",
 			title: " ",
@@ -750,9 +760,9 @@ io.on('connection', function (client) {
 				address_02: " ",
 				city: " ",
 				state: " ",
-				zip: " ",
+				zip: " "
 			},
-			email: " ",
+			email: data.e,
 			contact: " ",
 			date_entered: " ",
 			primary_carer: "",
@@ -760,7 +770,8 @@ io.on('connection', function (client) {
 			diagnosis: [ ],
 			progress: [ ],
 			picture: " ",
-			role: [data.r]
+			role: [data.r],
+			threshold: {high: "0", low: "0"}
 		};
 
 
@@ -788,6 +799,7 @@ io.on('connection', function (client) {
 		});
 
 
+
 		// Add to the user db using appropriate var [patient or user]
 		if (data.r == "patient"){
 			user_db.insert(patient);
@@ -801,13 +813,36 @@ io.on('connection', function (client) {
 
 			user_db.update(
 				{id: data.c},
-				{$push: 
+				{$addToSet://$push: 
 					{
 						patients: {id: data.id} 
 					} 
 				}
 			)
 		}
+
+
+	  // setup e-mail data with unicode symbols
+	  	var mailOptions = {
+		   from: "iXercise System <ixercisesystem@gmail.com>", // sender address.  Must be the same as authenticated user if using Gmail.
+		   to: "<" + data.e +">", // receiver
+		   subject: "You Have Been Registered to the iXercise System!", // subject
+		   html: "<p>Hello new user, <br> You have been registered to have an account in the iXercise System. <br><br> Your login information is: <br>id: " + data.id + '<br>pass: ' + randGen_pass + '<br><br> Please update your password at your own convenience. <br><br> Have a nice day! <br> From the iXercise System Team </p>' // body
+		};
+	
+
+		// send mail with defined transport object
+		transporter.sendMail(mailOptions, function(error, response){
+		    if(error){
+		        console.log(error);
+		    }else{
+		        console.log("Message sent: " + response.message);
+		    }
+
+		    transporter.close(); // shut down the connection pool, no more messages
+		});
+
+
 
 	});
 
@@ -861,23 +896,47 @@ io.on('connection', function (client) {
 	});
 
 
-	// -------------------------------------------------------------------------------- UPDATE PRESCRIPTION
+	// -------------------------------------------------------------------------------- DOCTOR UPDATE PATIENT INFO
 
 
 	client.on('prescription', function(data){                                                  
 		console.log('recieved new prescription ' + data.pres + " for patient " + data.patient);
+		console.log('recieved high threshold ' + data.h + " for patient " + data.patient);
+		console.log('recieved low threshold ' + data.l + " for patient " + data.patient);
 
-		// update the prescription (data.pres) of the patient (data.patient)              
+		            
 		var users_db = db.collection('users');
 
-		users_db.update(
-		   { id: data.patient },
-		   { $set:
-		      {
-		        prescription: data.pres
-		      }
-		   }
-		)		
+		if (data.pres != ""){
+			users_db.update(
+			   { id: data.patient },
+			   { $set:
+			      {
+			        prescription: data.pres
+			      }
+			   }
+			)
+		}
+		if (data.h != ""){
+			users_db.update(
+				{id: data.patient},
+				{$set: 
+					{
+						"threshold.high": data.h
+					} 
+				}
+			)
+		}
+		if (data.l != ""){
+			users_db.update(
+				{id: data.patient},
+				{$set: 
+					{
+						"threshold.low": data.l
+					} 
+				}
+			)
+		}		
 
 	});
 
@@ -913,8 +972,3 @@ io.on('connection', function (client) {
 }); // end of io.connection
 
 
-/* 
- NEED TO DO:
- 1. Have the dwownload button kind of do something, BUT NEED THE GRAPHS AND STUFF THERE
-
-*/
