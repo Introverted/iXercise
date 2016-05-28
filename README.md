@@ -13,13 +13,7 @@
 6. The website should run
 
 ---
-######For now you can put anything and it will take you to the doctor version. 
 
-I always put -  
-id: d
-and pass: 1.
-
----
 ######Important files containing the code: 
 **Home pages:**
 
