@@ -152,53 +152,62 @@
  <div class="content-wrapper">
   <section class="content">
 
-    <div class="box box-solid box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Add Patient</h3>
-      </div><!-- /.box-header -->
-      <div class="box-body">
-                    <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
-                        <tr>
-                            <td><input name="new_patient_id" type="text" id="new_patient_id" placeholder="patient id" size="20"/></td>   
-                            <td><input name="add_patient_email" type="text" id="add_patient_email" size="20" placeholder="email" /></td>
-                        </tr>
+    <div class="row"> 
+      <section class="col-lg-5 connectedSortable">
 
-                    </table>
-      </div><!-- /.box-body -->
-      <div class="box-footer">
-        <input name="add_patient_button" style="float:right" type="button" id="add_patient_buttonT" size="20" value="Add" />
-      </div><!-- box-footer -->
-    </div><!-- /.box -->
+          <div class="box box-solid box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add Patient</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                          <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
+                              <tr>
+                                  <td><input name="new_patient_id" type="text" id="new_patient_id" placeholder="patient id" size="20"/></td>   
+                                  <td><input name="add_patient_email" type="text" id="add_patient_email" size="20" placeholder="email" /></td>
+                              </tr>
 
-
-      <div class="box box-solid box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Remove Patient</h3>
-      </div><!-- /.box-header -->
-      <div class="box-body">
-                    <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
-                        <tr>
-                            <td><input name="remove_patient_id" type="text" id="remove_patient_id" placeholder="patient id" size="20"/></td>
-                            <td><input name="remove_patient_button" type="button" id="remove_patient_buttonT" size="20" value="Remove" /></td>
-                        </tr>
-                    </table>
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
+                          </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <input name="add_patient_button" style="float:right" type="button" id="add_patient_buttonT" size="20" value="Add" />
+            </div><!-- box-footer -->
+          </div><!-- /.box -->
 
 
-    <div class="box box-solid">
-      <div class="box-header with-border">
-        <h3 class="box-title">Patient List</h3>
+            <div class="box box-solid box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Remove Patient</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                          <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
+                              <tr>
+                                  <td><input name="remove_patient_id" type="text" id="remove_patient_id" placeholder="patient id" size="20"/></td>
+                                  <td><input name="remove_patient_button" type="button" id="remove_patient_buttonT" size="20" value="Remove" /></td>
+                              </tr>
+                          </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
 
-      </div>
-      <div class="box-body">
-                <div id="patient_list_div"> 
-                    <table id='patient_table' class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'></table>
-                    </div>
-                </div> 
-      </div> 
-    </div>
-    </section>
+        </section> <!--left-->
+        <section class="col-lg-7 connectedSortable">
+
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Patient List</h3>
+
+            </div>
+            <div class="box-body">
+                      <div id="patient_list_div"> 
+                          <table id='patient_table' class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'></table>
+                          </div>
+                      </div> 
+            </div> 
+          </div>
+          
+        </section> <!--right-->
+      </div> <!--row-->
+
+    </section><!--content-->
 
 
       <!-- Main Footer -->

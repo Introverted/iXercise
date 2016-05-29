@@ -807,6 +807,7 @@ io.on('connection', function (client) {
 			user_db.insert(user);
 		}
 
+
 		// If the user is a doctor and the new user is a patient add them to the doctor's  
 		// patient list
 		if (data.cr != "admin" && data.r == "patient"){
@@ -836,10 +837,8 @@ io.on('connection', function (client) {
 		    if(error){
 		        console.log(error);
 		    }else{
-		        console.log("Message sent: " + response.message);
+		        console.log("Message sent!");
 		    }
-
-		    transporter.close(); // shut down the connection pool, no more messages
 		});
 
 
@@ -894,6 +893,45 @@ io.on('connection', function (client) {
 		});
 		
 	});
+
+
+    // -------------------------------------------------------------------------------- SEND EMAIL
+    client.on("email message", function(data){
+    	console.log( data.c + " is sending a message to " + data.t);
+
+		var user_db = db.collection('users');
+
+		user_db.find({id: data.c}).toArray(function(err, result){
+			if(err){
+				console.log(err);
+			} else if (result.length) {	
+
+			  // setup e-mail data with unicode symbols
+			  	var mailOptions = {
+				   from: result[0].title + " " + result[0].last_name + " <ixercisesystem@gmail.com>", // sender address.  
+				   to: "<" + data.t +">", // receiver
+				   subject: data.s, // subject
+				   html: '<p>Hello, <br><br> '+ data.m + '<br><br>Thank you, <br>' + result[0].title + ' ' + result[0].first_name + ' ' + result[0].last_name + '<br><br>'  + result[0].email + '<br>' + result[0].contact + '</p>'
+				};
+			
+
+				// send mail with defined transport object
+				transporter.sendMail(mailOptions, function(error, response){
+				    if(error){
+				        console.log(error);
+				    }else{
+				        console.log("Message sent!");
+				    }
+				});
+
+			} else {
+
+				console.log('No result found with defined "find" criteria!');
+				client.emit('UNF', "User not found or deactivated");
+			}
+		});
+
+    });
 
 
 	// -------------------------------------------------------------------------------- DOCTOR UPDATE PATIENT INFO

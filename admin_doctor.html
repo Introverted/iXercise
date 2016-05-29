@@ -156,61 +156,70 @@
  <div class="content-wrapper">
   <section class="content">
 
-    <div class="box box-solid box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Add User</h3>
-      </div><!-- /.box-header -->
-      <div class="box-body">
-                <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
-                    <tr>
+    <div class="row"> 
+      <section class="col-lg-5 connectedSortable">
 
-                            <!--<td> user id </td>-->
-                            <td><input name="new_user_id" type="text" id="new_user_id" placeholder="user id" size="20"/></td>
-                            
-                            <!--<td> Role </td>-->
-                            <td><input name="new_user_position" type="text" id="new_user_position" placeholder="position eg. doctor" size="20"/></td>
-                    </tr>
-                    <tr>
-                            <td><input name="new_user_email" type="text" id="new_user_email" placeholder="user email" size="20"/></td> 
-                    </tr>
-                </table>
-      </div><!-- /.box-body -->
-      <div class="box-footer">
-        <input name="add_user_button" style="float:right" type="button" id="add_user_button" size="20" value="Add" />
-      </div><!-- box-footer -->
-    </div><!-- /.box -->
+          <div class="box box-solid box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add User</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                      <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
+                          <tr>
 
-
-    <div class="box box-solid box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Remove User</h3>
-      </div><!-- /.box-header -->
-      <div class="box-body">
-                <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
-                    <tr>
-                            <td><input name="remove_user_id" type="text" id="remove_user_id" placeholder="user id" size="20"/></td>
-                    </tr>
-                </table>
-      </div><!-- /.box-body -->
-      <div class="box-footer">
-        <input name="remove_user_button" style="float:right" type="button" id="remove_user_button" size="20" value="Remove" />
-      </div><!-- box-footer -->
-    </div><!-- /.box -->
+                                  <!--<td> user id </td>-->
+                                  <td><input name="new_user_id" type="text" id="new_user_id" placeholder="user id" size="20"/></td>
+                                  
+                                  <!--<td> Role </td>-->
+                                  <td><input name="new_user_position" type="text" id="new_user_position" placeholder="position eg. doctor" size="20"/></td>
+                          </tr>
+                          <tr>
+                                  <td><input name="new_user_email" type="text" id="new_user_email" placeholder="user email" size="20"/></td> 
+                          </tr>
+                      </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <input name="add_user_button" style="float:right" type="button" id="add_user_button" size="20" value="Add" />
+            </div><!-- box-footer -->
+          </div><!-- /.box -->
 
 
-    <div class="box box-solid">
-      <div class="box-header with-border">
-        <h3 class="box-title">User List</h3>
+          <div class="box box-solid box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Remove User</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                      <table class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'>
+                          <tr>
+                                  <td><input name="remove_user_id" type="text" id="remove_user_id" placeholder="user id" size="20"/></td>
+                          </tr>
+                      </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <input name="remove_user_button" style="float:right" type="button" id="remove_user_button" size="20" value="Remove" />
+            </div><!-- box-footer -->
+          </div><!-- /.box -->
 
-      </div>
-      <div class="box-body">
-                <div id="user_list_div"> 
-                    <table id='user_table' class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'></table>
-                    </div>
-                </div> 
-      </div> 
-    </div>
-    </section>
+        </section> <!--left-->
+        <section class="col-lg-7 connectedSortable">
+
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">User List</h3>
+
+            </div>
+            <div class="box-body">
+                      <div id="user_list_div"> 
+                          <table id='user_table' class="table table-bordred table-striped" border='0' width='50%' align='center' style="border-collapse:collapse" cellspacing='3' cellpadding='5'></table>
+                          </div>
+                      </div> 
+            </div> 
+          </div>
+
+        </section> <!--right-->
+      </div> <!--row-->
+
+    </section> <!--Content-->
 
       <!-- Main Footer -->
   <footer class="main-footer">
