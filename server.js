@@ -945,6 +945,7 @@ io.on('connection', function (client) {
 		            
 		var users_db = db.collection('users');
 
+		// Prescription
 		if (data.pres != ""){
 			users_db.update(
 			   { id: data.patient },
@@ -955,6 +956,7 @@ io.on('connection', function (client) {
 			   }
 			)
 		}
+		// High threshold
 		if (data.h != ""){
 			users_db.update(
 				{id: data.patient},
@@ -965,6 +967,7 @@ io.on('connection', function (client) {
 				}
 			)
 		}
+		// Low threshold
 		if (data.l != ""){
 			users_db.update(
 				{id: data.patient},
